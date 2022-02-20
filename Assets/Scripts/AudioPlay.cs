@@ -17,6 +17,11 @@ public class AudioPlay : MonoBehaviour
     [SerializeField] AudioSource jump_bark_audio;
     [SerializeField] AudioSource sniff_audio;
     [SerializeField] AudioSource growl_audio;
+    [SerializeField] AudioSource step_1_audio;
+    [SerializeField] AudioSource step_2_audio;
+    [SerializeField] AudioSource step_3_audio;
+    [SerializeField] AudioSource step_4_audio;
+
 
     GameObject barker_1;
     GameObject barker_2;
@@ -30,10 +35,16 @@ public class AudioPlay : MonoBehaviour
     GameObject jump_bark;
     GameObject sniffer;
     GameObject growl;
+    GameObject step_1;
+    GameObject step_2;
+    GameObject step_3;
+    GameObject step_4;
+
 
     //list with Audio sources
     [SerializeField] AudioSource[] audios;
     [SerializeField] AudioSource[] all_sounds;
+    [SerializeField] AudioSource[] step_sounds;
 
     // Start is called before the first frame update
     void Start()
@@ -50,6 +61,11 @@ public class AudioPlay : MonoBehaviour
         slow_panter = GameObject.Find("slow_pant");
         jump_bark = GameObject.Find("jump_bark");
         growl = GameObject.Find("growl");
+        step_1 = GameObject.Find("step");
+        step_2 = GameObject.Find("step (1)");
+        step_3 = GameObject.Find("step (2)");
+        step_4 = GameObject.Find("step (3)");
+
         bark_audio_1 = barker_1.GetComponent<AudioSource>();
         bark_audio_2 = barker_2.GetComponent<AudioSource>();
         bark_audio_3 = barker_3.GetComponent<AudioSource>();
@@ -62,16 +78,27 @@ public class AudioPlay : MonoBehaviour
         jump_bark_audio = jump_bark.GetComponent<AudioSource>();
         sniff_audio = sniffer.GetComponent<AudioSource>();
         growl_audio = growl.GetComponent<AudioSource>();
+        step_1_audio = step_1.GetComponent<AudioSource>();
+        step_2_audio = step_2.GetComponent<AudioSource>();
+        step_3_audio = step_3.GetComponent<AudioSource>();
+        step_4_audio = step_4.GetComponent<AudioSource>();
 
         audios = new AudioSource[] { bark_audio_1, bark_audio_2, bark_audio_3, bark_audio_5, bark_audio_6, bark_audio_7, bark_audio_8 };
-        all_sounds = new AudioSource[] {growl_audio, bark_audio_1, bark_audio_2, bark_audio_3, bark_audio_5, bark_audio_6, bark_audio_7, bark_audio_8, pant_audio, slow_pant_audio, jump_bark_audio, sniff_audio };
+        all_sounds = new AudioSource[] {pant_audio, slow_pant_audio, jump_bark_audio, sniff_audio };
+        step_sounds = new AudioSource[] { step_4_audio, step_3_audio, step_2_audio, step_1_audio };
     }
 
 
     //choose random index
-    private int GetRandomIndex()
+    private int GetRandomBarkIndex()
     {
         int index = Random.Range(0, audios.Length - 1);
+        return index;
+    }
+
+    private int GetRandomStepIndex()
+    {
+        int index = Random.Range(0, step_sounds.Length - 1);
         return index;
     }
 
@@ -83,7 +110,7 @@ public class AudioPlay : MonoBehaviour
 
     void BarkNow()
     {
-        int bark = GetRandomIndex();
+        int bark = GetRandomBarkIndex();
         Debug.Log("bark sound : " + audios[bark]);
 
         audios[bark].Play();
@@ -97,6 +124,12 @@ public class AudioPlay : MonoBehaviour
     void Growl()
     {
         growl_audio.Play();
+    }
+
+    void Step()
+    {
+        int step = GetRandomStepIndex();
+        step_sounds[step].Play();
     }
 
     void Pant(int speed)
