@@ -23,25 +23,27 @@ public class Audio_Sources : MonoBehaviour
     }
 
     public void StopAllSounds()
-    {   
+    {   /*
         aggressive_bark.Stop();
         panting.Stop();
         panting_calm.Stop();
-        bite_bark.Stop();
+        bite_bark.Stop();*/
     }
 
     public IEnumerator PlaySoundAfterPause(AudioSource audio)
-    {
+    {/*
         StopAllSounds();
         yield return new WaitForSeconds(3);
-        audio.Play();
+        audio.Play();*/
+        yield return new WaitForSeconds(0);
     }
     public IEnumerator PlaySoundAfterAnother(AudioSource audio1, AudioSource audio2)
     {
-        StopAllSounds();
+        /*StopAllSounds();
         audio1.Play();
         yield return new WaitForSeconds(1f);
         StopAllSounds();
-        audio2.Play();
+        audio2.Play();*/
+        yield return new WaitForSeconds(0f);
     }
 }
