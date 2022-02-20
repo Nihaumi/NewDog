@@ -45,6 +45,14 @@ public class AudioPlay : MonoBehaviour
     [SerializeField] AudioSource[] audios;
     [SerializeField] AudioSource[] all_sounds;
     [SerializeField] AudioSource[] step_sounds;
+    [SerializeField] AudioSource[] all_but_panting;
+
+    [SerializeField] AudioSource current_audio_source = null;
+
+    //volume for fade
+    float start_vol = 0.00f;
+    float start_vol_pant;
+    float start_vol_sniff;
 
     // Start is called before the first frame update
     void Start()
@@ -84,10 +92,18 @@ public class AudioPlay : MonoBehaviour
         step_4_audio = step_4.GetComponent<AudioSource>();
 
         audios = new AudioSource[] { bark_audio_1, bark_audio_2, bark_audio_3, bark_audio_5, bark_audio_6, bark_audio_7, bark_audio_8 };
-        all_sounds = new AudioSource[] {pant_audio, slow_pant_audio, jump_bark_audio, sniff_audio };
+        all_sounds = new AudioSource[] { pant_audio, slow_pant_audio, jump_bark_audio, sniff_audio };
+        all_but_panting = new AudioSource[] { jump_bark_audio, sniff_audio };
         step_sounds = new AudioSource[] { step_4_audio, step_3_audio, step_2_audio, step_1_audio };
+
+        //start_vol_pant = 0.3f;
+        //start_vol_sniff = 0.4f;
     }
 
+    void SetCurrentAudioSource(AudioSource audio_source)
+    {
+        current_audio_source = audio_source;
+    }
 
     //choose random index
     private int GetRandomBarkIndex()
@@ -102,34 +118,93 @@ public class AudioPlay : MonoBehaviour
         return index;
     }
 
+    bool fade = false;
+    float fade_time = 0.5f;
     // Update is called once per frame
     void Update()
     {
-        //BarkNow();
+
+    }
+
+    void FadeOut(AudioSource audio_source)
+    {
+        /*
+                if (start_vol == 0.00f)
+                {
+                    if (audio_source == pant_audio)
+                    {
+                        start_vol = start_vol_pant;
+                    }
+                    else
+                    {
+                        start_vol = start_vol_sniff;
+                    }
+                }
+
+                if (audio_source.isPlaying)
+                {
+                    if (audio_source.volume > 0.03f)
+                    {
+                        audio_source.volume -= start_vol * Time.deltaTime / fade_time;
+                    }
+                    else
+                    {
+                        audio_source.Stop();
+                        ResetVolumes(audio_source);
+                    }
+                }
+        */
+    }
+
+    void ResetVolumes(AudioSource audio_source)
+    {
+
+        if (audio_source == sniff_audio)
+        {
+            audio_source.volume = start_vol_sniff;
+        }
     }
 
     void BarkNow()
     {
         int bark = GetRandomBarkIndex();
-        Debug.Log("bark sound : " + audios[bark]);
-
         audios[bark].Play();
-
+        SetCurrentAudioSource(audios[bark]);
     }
+
     void JumpBark()
     {
         jump_bark_audio.Play();
+        SetCurrentAudioSource(jump_bark_audio);
     }
 
     void Growl()
     {
         growl_audio.Play();
+        SetCurrentAudioSource(growl_audio);
     }
 
+    int last_step = 0;
     void Step()
     {
-        int step = GetRandomStepIndex();
-        step_sounds[step].Play();
+        /*int step = GetRandomStepIndex();
+        Debug.Log("step = " + step);
+        Debug.Log("last step = " + last_step);
+        if(step == last_step)
+        {
+            return;
+        }
+        else
+        {
+            if (step_sounds[last_step].isPlaying)
+            {
+                step_sounds[last_step].Stop();
+            }
+            step_sounds[step].Play();
+        }
+        last_step = step;
+         SetCurrentAudioSource(step_sounds[step]);
+         */
     }
 
     void Pant(int speed)
@@ -143,9 +218,9 @@ public class AudioPlay : MonoBehaviour
                 }
                 break;
             case 0:
-                if (!slow_pant_audio.isPlaying)
+                if (!pant_audio.isPlaying)
                 {
-                slow_pant_audio.Play();
+                    pant_audio.Play();
                 }
                 break;
             case -1:
@@ -155,10 +230,12 @@ public class AudioPlay : MonoBehaviour
                 }
                 else if (pant_audio.isPlaying)
                 {
+
                     pant_audio.Stop();
                 }
                 break;
         }
+        SetCurrentAudioSource(pant_audio);
 
     }
 
@@ -169,6 +246,7 @@ public class AudioPlay : MonoBehaviour
             case 0:
                 if (sniff_audio.isPlaying)
                 {
+                    //FadeOut(sniff_audio);
                     sniff_audio.Stop();
                 }
                 break;
@@ -179,14 +257,26 @@ public class AudioPlay : MonoBehaviour
                 }
                 break;
         }
-
+        SetCurrentAudioSource(sniff_audio);
     }
 
     void StopSounds()
     {
         foreach (AudioSource sound in all_sounds)
+        {
             sound.Stop();
+        }
+        SetCurrentAudioSource(null);
+        //ResetVolumes(pant_audio);
+        //ResetVolumes(sniff_audio);
     }
 
-
+    void StopEverythingButPanting()
+    {
+        foreach (AudioSource sound in all_but_panting)
+        {
+            sound.Stop();
+        }
+        SetCurrentAudioSource(null);
+    }
 }
