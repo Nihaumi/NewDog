@@ -147,7 +147,7 @@ public class Aggressive_Behaviour : MonoBehaviour
                 /*
                  * 3. laufen zum target = pause location
                  */
-                bool are_we_touching_the_agg_pos = MU.walk_until_touching(agg_position, 3f, false);
+                bool are_we_touching_the_agg_pos = MU.walk_until_touching(agg_position, 1f, false);
 
                 if (are_we_touching_the_agg_pos)
                     current_step = Step.TurnToPlayer;
@@ -324,40 +324,38 @@ public class Aggressive_Behaviour : MonoBehaviour
                         basic_behav.dog_state = Basic_Behaviour.Animation_state.lying;
                         dog_audio.PlaySoundAfterPause(dog_audio.panting_calm);
                     }*/
-                    
+
                     break;
                 case Basic_Behaviour.Animation_state.aggressiv:
                     aggressive = true;
                     dog_audio.StopAllSounds();
-                    if (aggression_animation_counter == 1 % 4 || aggression_animation_counter == 2 % 4)
+                    if (aggression_animation_counter == 1)
                     {
                         anim_controll.ChangeAnimationState(anim.aggressive);
-                        dog_audio.StopAllSounds();
-                        dog_audio.aggressive_bark.Play();
                         aggression_animation_counter++;
                         basic_behav.SetShortTimer(10, 10);
                     }
-                    else if (aggression_animation_counter == 0 % 4)
+                    else if (aggression_animation_counter == 0)
                     {
                         anim_controll.ChangeAnimationState(anim.bite_L);
-                        dog_audio.StartCoroutine(dog_audio.PlaySoundAfterAnother(dog_audio.bite_bark, dog_audio.aggressive_bark));
                         aggression_animation_counter++;
                         basic_behav.SetShortTimer(10, 10);
                     }
-                    else if (aggression_animation_counter == 5)
+                    else if (aggression_animation_counter == 2)
                     {
                         anim_controll.ChangeAnimationState(anim.bite_R);
-                        dog_audio.StartCoroutine(dog_audio.PlaySoundAfterAnother(dog_audio.bite_bark, dog_audio.aggressive_bark));
                         aggression_animation_counter++;
-                        basic_behav.SetShortTimer(10, 10);
+                        basic_behav.dog_state = Basic_Behaviour.Animation_state.after_aggression;
+                        basic_behav.SetShortTimer(1, 1);
                     }
                     else if (aggression_animation_counter == 3 % 4)
-                    {
+                    {/*
                         basic_behav.dog_state = Basic_Behaviour.Animation_state.after_aggression;
                         basic_behav.SetShortTimer(2, 2);
+                    */
                     }
 
-                    ; //TODO set times to 10
+                    //TODO set times to 10
 
                     break;
 

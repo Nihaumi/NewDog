@@ -167,8 +167,9 @@ public class Behaviour_Switch : MonoBehaviour
             }
             else if (visited_behaviours_count == 3 % 5)
             {
-                pause_time = 10f;
-                paused = true;
+                //pause_time = 10f;
+                //paused = true;
+                agressive = true;
             }
             else paused = true;
 
@@ -196,7 +197,7 @@ public class Behaviour_Switch : MonoBehaviour
             else if (visited_behaviours_count == 2 % 5)
             {
                 neutral = true;
-                neutral_timer = 20f;
+                neutral_timer = 10f; //TODO anpassen
             }
             else if (visited_behaviours_count == 3 % 5)
             {

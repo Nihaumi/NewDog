@@ -152,6 +152,7 @@ public class Pause_Behaviour : MonoBehaviour
             case Step.LayDown:
 
                 MU.lay_down();
+                basic_behav.change_anim_timer = 20f;//TODO anpassen
                 current_step = Step.Stop;
 
                 break;
