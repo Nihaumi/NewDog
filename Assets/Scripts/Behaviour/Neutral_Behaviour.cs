@@ -34,6 +34,7 @@ public class Neutral_Behaviour : MonoBehaviour
         Stop,
         initial,
         dodge,
+        AfterDodge
     }
 
    public Step current_step;
@@ -106,7 +107,7 @@ public class Neutral_Behaviour : MonoBehaviour
                 {
                     dodge_count++;
                     dodge_timer = 0;
-                    current_step = Step.Turn;
+                    current_step = Step.AfterDodge;
                 }
                 else if (dodge_count > 0)
                 {
@@ -205,6 +206,15 @@ public class Neutral_Behaviour : MonoBehaviour
                 basic_behav.y_goal = Basic_Behaviour.trot_value;
                 basic_behav.y_acceleration = 2f;
                 current_step = Step.WalkToTarget;
+                break;
+            case Step.AfterDodge:
+                basic_behav.y_acceleration = basic_behav.default_y_acceleration;
+                basic_behav.change_anim_timer = 1f;//TODO anpassen
+                behav_switch.SetNeutralTimer(15);
+                basic_behav.set_bbt_values(false, Basic_Behaviour.bbt_all_walks_value);
+                basic_behav.y_goal = Basic_Behaviour.walking_slow_value;
+                basic_behav.dog_state = Basic_Behaviour.Animation_state.walking;
+                current_step = Step.Stop;
                 break;
             case Step.Stop:
                 target_count = 0;
@@ -380,7 +390,7 @@ public class Neutral_Behaviour : MonoBehaviour
                     }
                     else if (basic_behav.random_index == 1)
                     {
-                        anim_controll.ChangeAnimationState(anim.list_sleeping[basic_behav.random_index]);
+                        //anim_controll.ChangeAnimationState(anim.list_sleeping[basic_behav.random_index]);
 
                         basic_behav.dog_state = Basic_Behaviour.Animation_state.standing;
                     }
@@ -428,9 +438,9 @@ public class Neutral_Behaviour : MonoBehaviour
 
                     if (basic_behav.random_index == 0)
                     {
-                        basic_behav.dog_state = Basic_Behaviour.Animation_state.standing;
-                        basic_behav.set_bbt_values(false, Basic_Behaviour.bbt_all_walks_value);
-                        basic_behav.y_goal = Basic_Behaviour.standing_value;
+                       // basic_behav.dog_state = Basic_Behaviour.Animation_state.standing;
+                        //basic_behav.set_bbt_values(false, Basic_Behaviour.bbt_all_walks_value);
+                        //basic_behav.y_goal = Basic_Behaviour.standing_value;
                     }
                     else
                     {

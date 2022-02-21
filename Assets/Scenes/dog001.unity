@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.19451791, g: 0.23264395, b: 0.2677174, a: 1}
+  m_IndirectSpecularColor: {r: 0.19457275, g: 0.23262545, b: 0.26770875, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3171,7 +3171,19 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8850676230691887214, guid: 4af13fd5a5f27fe4ba8d8fd2cc3c4106, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8850676230727899719, guid: 4af13fd5a5f27fe4ba8d8fd2cc3c4106, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8850676230746652311, guid: 4af13fd5a5f27fe4ba8d8fd2cc3c4106, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8850676231132415364, guid: 4af13fd5a5f27fe4ba8d8fd2cc3c4106, type: 3}
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
@@ -3211,6 +3223,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8850676231877930080, guid: 4af13fd5a5f27fe4ba8d8fd2cc3c4106, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4af13fd5a5f27fe4ba8d8fd2cc3c4106, type: 3}
 --- !u!1001 &571667560
@@ -3224,6 +3240,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: positions
       objectReference: {fileID: 0}
+    - target: {fileID: 5158742478284593870, guid: 622865d0b1086e448bb44b3171d5705c, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5158742479694840217, guid: 622865d0b1086e448bb44b3171d5705c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.95
@@ -3234,7 +3254,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5158742479694840219, guid: 622865d0b1086e448bb44b3171d5705c, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7392057765496584953, guid: 622865d0b1086e448bb44b3171d5705c, type: 3}
       propertyPath: m_RootOrder
@@ -4395,7 +4415,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5335848239845017249, guid: 0decb17586d8c044893d81d4058daaed, type: 3}
       propertyPath: neutral
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5335848239845017249, guid: 0decb17586d8c044893d81d4058daaed, type: 3}
       propertyPath: friendly
@@ -4403,7 +4423,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5335848239845017249, guid: 0decb17586d8c044893d81d4058daaed, type: 3}
       propertyPath: agressive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5335848239845017249, guid: 0decb17586d8c044893d81d4058daaed, type: 3}
       propertyPath: chilled_on
@@ -4411,7 +4431,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5335848239845017249, guid: 0decb17586d8c044893d81d4058daaed, type: 3}
       propertyPath: neutral_time
-      value: 60
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 5335848239845017250, guid: 0decb17586d8c044893d81d4058daaed, type: 3}
       propertyPath: m_RootOrder
@@ -5444,7 +5464,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1317261781}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -8766,7 +8786,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2003469518}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 4.89, y: 0, z: 1.6}
+  m_LocalPosition: {x: 4.75, y: 0, z: 2.06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 947569370}

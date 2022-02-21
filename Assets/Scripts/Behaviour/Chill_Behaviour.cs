@@ -108,7 +108,7 @@ public class Chill_Behaviour : MonoBehaviour
         }
         else if (target_count % num_of_targets == 1)
         {
-            target = chill_pos_3;
+            target = chill_pos;
         }
         Debug.Log("CHILL TARGET = " + target);
 
