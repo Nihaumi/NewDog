@@ -486,7 +486,11 @@ public class Basic_Behaviour : MonoBehaviour
         }
         else if (GetPlayerOffsetAngle(0, 30, false) == 0 && !behav_switch.IsBehaviourON(2))
         {
-            focus = 2;
+            if(behav_switch.IsBehaviourON(1) && MU.is_touching(player, 5f))
+            {
+                focus = 3;
+            }
+            else focus = 2;
         }
         if (behav_switch.IsBehaviourON(2) && GetPlayerOffsetAngle(0, 30, false) == 0 && x_goal == 0)
         {
@@ -866,90 +870,7 @@ public class Basic_Behaviour : MonoBehaviour
         return false;
     }
     //triggers the walkingtowards and sets bools
-    public void TurningAndWalkingLogicHandler()
-    {
-        if (friendly_behav.enabled)
-        {
-            if (!friendly_behav.started_walking /*&& !friendly_behav.facing_player*/)
-            {
-                Debug.Log("start walking - frendo");
-
-                StartCoroutine(WaitBeforeWalkingTowards(friendly_behav.player_target));
-                //friendly_behav.started_walking = true;
-            }
-            /*  if (TouchingPlayer(friendly_behav.friendly_goal_dist_to_player))
-              {
-                  Debug.Log("TOUCHING - frendo");
-                  //friendly_behav.facing_player = true;
-                  friendly_behav.started_walking = false;
-                  turning_in_place = false;
-              }*/
-        }
-        else if (agg_behav.enabled)
-        {
-            if (!agg_behav.started_walking && !agg_behav.facing_target)
-            {
-                Debug.Log("start walking - aggro");
-                StartCoroutine(WaitBeforeWalkingTowards(agg_behav.player));
-                agg_behav.started_walking = true;
-            }
-            if (agg_behav.dist_to_target < agg_behav.reached_target)
-            {
-                Debug.Log("TOUCHING - aggro");
-                agg_behav.facing_target = true;
-                turning_in_place = false;
-                agg_behav.started_walking = false;
-            }
-        }
-        else if (pause_behav.enabled)
-        {
-            if (!pause_behav.started_walking && !pause_behav.facing_pause_location)
-            {
-                Debug.Log("start walking - pause");
-                pause_behav.started_walking = true;
-            }
-            if (pause_behav.dist_to_target < pause_behav.pause_goal_dist)
-            {
-                pause_behav.facing_pause_location = true;
-                turning_in_place = false;
-                pause_behav.started_walking = false;
-            }
-        }
-
-    }
-
-    //walking towards
-    public IEnumerator WaitBeforeWalkingTowards(GameObject target)
-    {
-
-        Debug.Log("WALK BITCH");
-        //turning_in_place = false;
-        if (GetPlayerOffset(0, 4, 1f, true) == 0)
-        {
-            Debug.Log("FACING");
-
-            WalkForward();
-            yield return new WaitForSeconds(0);
-
-            if (!TouchingPlayer(friendly_behav.friendly_goal_dist_to_player))
-            {
-                //dog.transform.position = Vector3.MoveTowards(current_position, target.transform.position, Time.deltaTime * 0.3f);
-            }
-            else
-            {
-                Debug.Log("TOUCHING - frendo");
-                //friendly_behav.facing_player = true;
-                yield return new WaitForSeconds(0);
-                friendly_behav.facing_player = true;
-                friendly_behav.started_walking = true;
-                //friendly_behav.started_walking = false;
-                turning_in_place = false;
-            }
-
-        }
-
-
-    }
+   
 
     // Update is called once per frame
     void Update()
@@ -1011,13 +932,14 @@ public class Basic_Behaviour : MonoBehaviour
             //DodgePlayer(5);
         }
         else if (behav_switch.IsBehaviourON(4))
-        {
+        {//chill
             Debug.Log("CHILL BOI");
             chill_behav.BeChill();
         }
         else if(behav_switch.IsBehaviourON(1))
         {//neutral
-            if (dog_state == Animation_state.walking)
+            neutral_behav.DoTrot();//TODO uncomment
+            if (dog_state == Animation_state.walking && (neutral_behav.current_step == Neutral_Behaviour.Step.initial || neutral_behav.current_step == Neutral_Behaviour.Step.Stop))
             {
                 if (MU.DodgePlayer(player, 3)) //TODO enable
                 {

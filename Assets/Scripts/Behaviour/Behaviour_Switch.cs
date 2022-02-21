@@ -101,7 +101,18 @@ public class Behaviour_Switch : MonoBehaviour
         agressive_timer = agressive_time;
         pause_timer = pause_time;
     }
-
+    public float GetNeutralTimer()
+    {
+        return neutral_timer;
+    }
+    public void SetNeutralTimer(float time)
+    {
+        neutral_timer = time;
+    }
+    public float GetNeutralTime()
+    {
+        return neutral_time;
+    }
     // Update is called once per frame
     void Update()
     {
@@ -152,7 +163,10 @@ public class Behaviour_Switch : MonoBehaviour
     }
 
     [SerializeField] int visited_behaviours_count;
-
+    public int GetVisitedBehavCount()
+    {
+        return visited_behaviours_count;
+    }
     void ChangeBehaviours()
     {
         if (/*friendly_timer <= 0 || */enter_pause)

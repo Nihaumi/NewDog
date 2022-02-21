@@ -71,8 +71,7 @@ public class Turning_Behaviour : MonoBehaviour
                 if (basic_behav.y_goal == Basic_Behaviour.trot_value)
                 {
                     anim_controll.ChangeAnimationState(anim.turn_trot_tree);
-                    dog_audio.panting.Play();
-                    basic_behav.SetShortTimer(0.3f, 0.6f);
+                    //basic_behav.SetShortTimer(0.3f, 0.6f);
                 }
                 basic_behav.TurnLeft();
                 break;
@@ -96,22 +95,20 @@ public class Turning_Behaviour : MonoBehaviour
                 if (basic_behav.y_goal == Basic_Behaviour.trot_value)
                 {
                     anim_controll.ChangeAnimationState(anim.turn_trot_tree);
-                    basic_behav.SetShortTimer(0.3f, 0.6f);
-                    dog_audio.panting.Play();
+                    //basic_behav.SetShortTimer(0.3f, 0.6f);
+
                 }
                 basic_behav.TurnRight();
                 break;
             case Basic_Behaviour.Animation_state.walking_after_turning:
-                //audio
-                dog_audio.StopAllSounds();
 
                 basic_behav.SetLongTimer();
                 basic_behav.WalkForward();
-                if(Mathf.Abs(basic_behav.x_goal) == Basic_Behaviour.trot_value)
+                /*if(Mathf.Abs(basic_behav.x_goal) == Basic_Behaviour.trot_value)
                 {
                     basic_behav.SetShortTimer(0.2f, 0.5f);
                     dog_audio.panting.Play();
-                }
+                }*/
                 basic_behav.dog_state = Basic_Behaviour.Animation_state.walking;
                 walking_after_turning_on = true;
                 return walking_after_turning_on;

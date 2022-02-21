@@ -244,17 +244,10 @@ public class MovementUtils : MonoBehaviour
             timer = 1f;
             Debug.Log("DODGE");
 
-            if (basic_behav.y_goal == Basic_Behaviour.trot_value)
-            {
-                timera = 3;
-                //y_goal = walking_value;
-            }
+           
             //change_blend_tree_if_necessary(false);
             basic_behav.choose_direction_to_walk_into(player, true);
-            if (basic_behav.change_anim_timer > timera)
-            {
-                basic_behav.change_anim_timer = timera;
-            }
+
             return true;
         }
         else
