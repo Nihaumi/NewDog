@@ -8,7 +8,7 @@ public class MovementUtils : MonoBehaviour
     Animation_Controll anim_controll;
     Animations anim;
     Basic_Behaviour basic_behav;
-    float speed = 10f;
+    float speed;
 
     Vector3 direction;
     Quaternion rotation;
@@ -19,6 +19,8 @@ public class MovementUtils : MonoBehaviour
         anim_controll = dog.GetComponent<Animation_Controll>();
         anim = dog.GetComponent<Animations>();
         basic_behav = dog.GetComponent<Basic_Behaviour>();
+
+        speed = 10f;
     }
 
     public void sit_down()
@@ -42,7 +44,7 @@ public class MovementUtils : MonoBehaviour
         }
         else
         {
-            
+
             start_turning_towards(target);
             return false;
         }
@@ -65,7 +67,7 @@ public class MovementUtils : MonoBehaviour
             return false;
         }
     }
-    
+
     public bool is_touching(GameObject target, float distance = 1f)
     {
         float dist = get_dist_to_target(target);
@@ -126,6 +128,7 @@ public class MovementUtils : MonoBehaviour
                 return false;
             }
         }
+       
         else if (Mathf.Abs(basic_behav.y_axis) + Mathf.Abs(basic_behav.x_axis) > speed)
         {
             return true;
@@ -141,13 +144,13 @@ public class MovementUtils : MonoBehaviour
         basic_behav.x_goal = Basic_Behaviour.standing_value;
         change_blend_tree_if_necessary(true);
     }
-    public void start_moving()
+    public void start_moving(float y_accel = 2f)
     {
         //stop_turning();
         change_blend_tree_if_necessary(true);
         //basic_behav.y_goal = basic_behav.walking_value;
         basic_behav.WalkForward();
-        basic_behav.y_acceleration = 2f;
+        basic_behav.y_acceleration = y_accel;
     }
 
     public void start_moving_straight()
@@ -162,6 +165,14 @@ public class MovementUtils : MonoBehaviour
         change_blend_tree_if_necessary(true);
         basic_behav.y_goal = Basic_Behaviour.standing_value;
         basic_behav.x_goal = Basic_Behaviour.standing_value;
+    }
+
+    public void start_seeking()
+    {
+        basic_behav.set_bbt_values(true, Basic_Behaviour.bbt_standing_value);
+        basic_behav.WalkForward();
+        basic_behav.y_goal = Basic_Behaviour.seek_value;
+        basic_behav.y_acceleration = basic_behav.default_y_acceleration;
     }
 
     public bool distance_from_target(GameObject target, float dist = 7f)
@@ -197,7 +208,7 @@ public class MovementUtils : MonoBehaviour
     {
         //Debug.Log("WHY?!");
         //Debug.Log("CURRENT STATE: " + anim_controll.current_state);
-        
+
         anim_controll.ChangeAnimationState(anim.bbt);
         if (anim_controll.current_state != anim.bbt)
         {
@@ -210,7 +221,7 @@ public class MovementUtils : MonoBehaviour
             //Debug.Log("Z value should be " + Basic_Behaviour.blending_bt_standing + " but is " + basic_behav.z_axis);
             basic_behav.set_bbt_values(false, Basic_Behaviour.bbt_standing_value);
         }
-        else if(!standing && (basic_behav.z_goal != Basic_Behaviour.bbt_no_standing_value || basic_behav.zx_goal == Basic_Behaviour.bbt_seek_value))
+        else if (!standing && (basic_behav.z_goal != Basic_Behaviour.bbt_no_standing_value || basic_behav.zx_goal == Basic_Behaviour.bbt_seek_value))
         {
             Debug.Log("I WANT TO WALK IN MU!");
             //Debug.Log("Z value should be " + Basic_Behaviour.blending_bt_no_standing + " but is " + basic_behav.z_axis);
@@ -223,10 +234,10 @@ public class MovementUtils : MonoBehaviour
     //        otherwise false
     [SerializeField] float timer = 0f;
     [SerializeField] float timer_walk = 0f;
-    const float default_walk_timer = 3f; 
-    public bool DodgePlayer(GameObject player, float timera = 5f)
+    const float default_walk_timer = 3f;
+    public bool DodgePlayer(GameObject player, float dist = 3f, float timera = 5f)
     {
-        if (is_touching(player, 3f) && basic_behav.GetPlayerOffsetAngle(0, 100, true, player) == 0)//TODO distance und timing anpassen UND turning speed auf walk
+        if (is_touching(player, dist) && basic_behav.GetPlayerOffsetAngle(0, 100, true, player) == 0)//TODO distance und timing anpassen UND turning speed auf walk
         {
             timer = 1f;
             Debug.Log("DODGE");
@@ -246,15 +257,20 @@ public class MovementUtils : MonoBehaviour
         }
         else
         {
-            if(timer > 0){
+            if (timer > 0)
+            {
                 timer -= Time.deltaTime;
                 timer_walk = default_walk_timer;
                 return true;
-            }else if(timer_walk == default_walk_timer){
+            }
+            else if (timer_walk == default_walk_timer)
+            {
                 basic_behav.WalkForward();
                 timer_walk -= Time.deltaTime;
                 return true;
-            }else if(timer_walk > 0){
+            }
+            else if (timer_walk > 0)
+            {
                 timer_walk -= Time.deltaTime;
                 return true;
             }
