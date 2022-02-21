@@ -127,7 +127,7 @@ public class Friendly_Behaviour : MonoBehaviour
                 MU.reset_acceleration();
                 bool are_we_facing_the_player = MU.turn_until_facing(player_target, true);
 
-                if (are_we_facing_the_player)
+                if (are_we_facing_the_player || MU.is_touching(player_target))
                     current_step = Step.WalkToTarget;
                 break;
             case Step.WalkToTarget:

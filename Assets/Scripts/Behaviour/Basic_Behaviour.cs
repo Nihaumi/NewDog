@@ -49,6 +49,7 @@ public class Basic_Behaviour : MonoBehaviour
     PlayerInteraction player_interaction;
     Aggressive_Behaviour agg_behav;
     Pause_Behaviour pause_behav;
+    Chill_Behaviour chill_behav;
     MovementUtils MU;
 
     double neutral_goal_dist_to_player = 3f;
@@ -79,6 +80,7 @@ public class Basic_Behaviour : MonoBehaviour
         agg_behav = dog.GetComponent<Aggressive_Behaviour>();
         pause_behav = dog.GetComponent<Pause_Behaviour>();
         MU = dog.GetComponent<MovementUtils>();
+        chill_behav = dog.GetComponent<Chill_Behaviour>();
 
         //state
         anim_controll.current_state = anim.bbt;
@@ -477,31 +479,37 @@ public class Basic_Behaviour : MonoBehaviour
 
         int focus = 3;
 
-        if (!friendly_behav.enabled || GetPlayerOffset(0, 4, 1f, false) == 2)
+     
+        if ( x_goal != standing_value || anim_controll.current_state == anim.sleep || zx_goal != 0)
         {
             focus = 3;
         }
-        else if (dog_state == Animation_state.walking || y_goal != standing_value || x_goal != standing_value || anim_controll.current_state == anim.sleep)
+        else if (GetPlayerOffsetAngle(0, 30, false) == 0 && !behav_switch.IsBehaviourON(2))
         {
-            focus = 3;
-        }
-        else if (!player_interaction.AreHandsMoving() || (friendly_behav.GetCurrentStep() == Friendly_Behaviour.Step.WalkToTarget))
-        {   //look at Head and away from left and right Hand
             focus = 2;
-            Debug.Log("TRACK HEAD");
         }
-        else if (player_interaction.GetFastes() == -1)
-        {   //look at left Hand and away from Head and right Hand
-            focus = 1;
-            Debug.Log("TRACK LEFT");
+        if (behav_switch.IsBehaviourON(2) && GetPlayerOffsetAngle(0, 30, false) == 0 && x_goal == 0)
+        {
+            if (!player_interaction.AreHandsMoving() || (friendly_behav.GetCurrentStep() == Friendly_Behaviour.Step.WalkToTarget))
+            {   //look at Head and away from left and right Hand
+                focus = 2;
+                Debug.Log("TRACK HEAD");
+            }
+            else if (player_interaction.GetFastes() == -1)
+            {   //look at left Hand and away from Head and right Hand
+                focus = 1;
+                Debug.Log("TRACK LEFT");
 
-        }
-        else if (player_interaction.GetFastes() == 1)
-        {   //look at right Hand and away from Head and left Hand
-            focus = 0;
+            }
+            else if (player_interaction.GetFastes() == 1)
+            {   //look at right Hand and away from Head and left Hand
+                focus = 0;
 
-            Debug.Log("TRACK RIGHT");
+                Debug.Log("TRACK RIGHT");
+            }
         }
+        
+        
         if (!are_rigs_set)
         {
             SetRigValues();
@@ -1002,6 +1010,11 @@ public class Basic_Behaviour : MonoBehaviour
             }
             //DodgePlayer(5);
         }
+        else if (behav_switch.IsBehaviourON(4))
+        {
+            Debug.Log("CHILL BOI");
+            chill_behav.BeChill();
+        }
         else if(behav_switch.IsBehaviourON(1))
         {//neutral
             if (dog_state == Animation_state.walking)
@@ -1038,6 +1051,10 @@ public class Basic_Behaviour : MonoBehaviour
             else if (behav_switch.IsBehaviourON(0))
             {//pause
                 pause_behav.PauseBehaviour();
+            }
+            else if (behav_switch.IsBehaviourON(4))
+            {
+                chill_behav.ChillBehaviour();
             }
             ResetTimerFunction();
             //Debug.Log("new state " + dog_state);

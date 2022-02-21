@@ -140,7 +140,7 @@ public class Aggressive_Behaviour : MonoBehaviour
                 MU.reset_acceleration();
                 bool are_we_facing_the_agg_target = MU.turn_until_facing(agg_position, true);
 
-                if (are_we_facing_the_agg_target)
+                if (are_we_facing_the_agg_target || MU.is_touching(agg_position))
                     current_step = Step.WalkToPos;
                 break;
             case Step.WalkToPos:

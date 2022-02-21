@@ -34,8 +34,10 @@ public class MovementUtils : MonoBehaviour
     public bool turn_until_facing(GameObject target, bool and_start_moving = false)
     {
         Debug.Log("TURN GOAL: " + basic_behav.x_goal);
+        Debug.Log("IS LOOK AT 1??? " + is_looking_at(target));
         if (is_looking_at(target))
         {
+            Debug.Log("IS LOOK AT??? " + is_looking_at(target));
             if (and_start_moving)
                 start_moving_straight();
             else

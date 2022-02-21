@@ -12,6 +12,7 @@ public class Behaviour_Switch : MonoBehaviour
     public Basic_Behaviour basic_script;
     public Aggressive_Behaviour aggressive_script;
     public Pause_Behaviour pause_behav;
+    public Chill_Behaviour chill_behav;
     Turning_Behaviour turning_behav;
 
 
@@ -26,6 +27,7 @@ public class Behaviour_Switch : MonoBehaviour
     [SerializeField] bool agressive;
     [SerializeField] bool neutral;
     [SerializeField] bool paused;
+    [SerializeField] bool chill;
     [SerializeField] float friendly_timer;
     [SerializeField] float agressive_timer;
     [SerializeField] float neutral_timer;
@@ -41,6 +43,7 @@ public class Behaviour_Switch : MonoBehaviour
     [SerializeField] bool aggressive_on = false;
     [SerializeField] bool neutral_on = false;
     [SerializeField] bool paused_on = false;
+    [SerializeField] bool chilled_on = false;
 
     public bool enter_pause = false;
     //behaviour states
@@ -50,6 +53,7 @@ public class Behaviour_Switch : MonoBehaviour
         friendly,
         neutral,
         aggressive,
+        chill,
         paused
     }
     public Behaviour_state dog_behaviour;
@@ -67,6 +71,7 @@ public class Behaviour_Switch : MonoBehaviour
         aggressive_script = dog.GetComponent<Aggressive_Behaviour>();
         turning_behav = dog.GetComponent<Turning_Behaviour>();
         pause_behav = dog.GetComponent<Pause_Behaviour>();
+        chill_behav = dog.GetComponent<Chill_Behaviour>();
 
         //set scripts
         DisableScripts();
@@ -129,6 +134,12 @@ public class Behaviour_Switch : MonoBehaviour
             aggressive_on = true;
             agressive_timer = agressive_timer - Time.deltaTime * 1;
         }
+        else if (chill)
+        {
+            DisableScripts();
+            turning_on = false;
+            chilled_on = true;
+        }
         else if (paused)
         {
             Debug.Log("PAUSED ON");
@@ -183,6 +194,7 @@ public class Behaviour_Switch : MonoBehaviour
             paused = true;
             enter_pause = false;
         }
+        
         if (pause_behav.end_pause)
         {
             Debug.Log("PAUSED DOWN");
@@ -205,7 +217,7 @@ public class Behaviour_Switch : MonoBehaviour
             }
             else if (visited_behaviours_count == 4 % 5)
             {
-                neutral = true;
+                chill = true;
             }
             pause_behav.end_pause = false;
         }
@@ -217,6 +229,7 @@ public class Behaviour_Switch : MonoBehaviour
         neutral = false;
         friendly = false;
         paused = false;
+        chill = false;
     }
 
     public void DisableScripts()
@@ -225,6 +238,7 @@ public class Behaviour_Switch : MonoBehaviour
         aggressive_on = false;
         paused_on = false;
         neutral_on = false;
+        chilled_on = false;
     }
 
     public bool IsBehaviourON(int behaviour_number)
@@ -255,6 +269,13 @@ public class Behaviour_Switch : MonoBehaviour
                 break;
             case 3:
                 if (aggressive_on == true)
+                {
+                    return true;
+                }
+                else is_behav_true = false;
+                break;
+            case 4:
+                if (chilled_on == true)
                 {
                     return true;
                 }

@@ -106,7 +106,7 @@ public class Pause_Behaviour : MonoBehaviour
                 MU.reset_acceleration();
                 bool are_we_facing_the_pause_target = MU.turn_until_facing(pause_target, true);
 
-                if (are_we_facing_the_pause_target)
+                if (are_we_facing_the_pause_target || MU.is_touching(pause_target))
                     current_step = Step.WalkToTarget;
                 break;
             case Step.WalkToTarget:

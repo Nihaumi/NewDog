@@ -89,7 +89,7 @@ public class Chill_Behaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        BeChill();
+
     }
 
 
@@ -135,7 +135,7 @@ public class Chill_Behaviour : MonoBehaviour
                 MU.reset_acceleration();
                 bool are_we_facing_the_pos = MU.turn_until_facing(SetTarget(), false); ;
 
-                if (are_we_facing_the_pos)
+                if (are_we_facing_the_pos || MU.is_touching(SetTarget()))
                     current_step = Step.SwitchToSeek;
                 break;
             case Step.SwitchToSeek:
