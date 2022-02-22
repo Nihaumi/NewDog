@@ -475,13 +475,13 @@ public class Basic_Behaviour : MonoBehaviour
         //random_index = random_index ==1 ? 0 : 1;
         random_index = Random.Range(0, list.Count);
     }
-
+    int focus = 3;
     //follow hand/head of player
     public void SetFollowObject()
     {
 
-        int focus = 3;
 
+        focus = 3;
 
         if (x_goal != standing_value || anim_controll.current_state == anim.sleep || zx_goal != 0)
         {
@@ -520,11 +520,9 @@ public class Basic_Behaviour : MonoBehaviour
         }
 
 
-        if (!are_rigs_set)
-        {
-            SetRigValues();
-            are_rigs_set = true;
-        }
+        SetRigValues();
+
+
         SetWeightConstraint(neck_constraint_1, focus);
         SetWeightConstraint(neck_constraint_2, focus);
         SetWeightConstraint(neck_constraint_3, focus);
@@ -712,7 +710,7 @@ public class Basic_Behaviour : MonoBehaviour
                 weight_update_head = curent_weight_head - weight_change_rate * Time.deltaTime;
                 weight_update_head = Mathf.Max(weight_update_head, 0);
                 weight_update_forward = current_weight_forward - weight_change_rate * Time.deltaTime;
-                weight_update_forward = Mathf.Max(weight_update_forward, 0);
+                weight_update_forward = Mathf.Max(weight_update_forward, 0.1f);
                 break;
             case 4:
                 weight_update_right = curent_weight_right - weight_change_rate * Time.deltaTime;
@@ -737,6 +735,16 @@ public class Basic_Behaviour : MonoBehaviour
     //Setts Rig values accoprding to player offset
     void SetRigValues()
     {
+        float z_offset;
+
+        if (focus == 3)
+        {
+            z_offset = 0;
+        }
+        else
+        {
+            z_offset = -40f;
+        }
 
         neck_constraint_1.data.limits = new Vector2(-12, 12);
         neck_constraint_1.data.offset = new Vector3(0, 0, 0);
@@ -752,14 +760,13 @@ public class Basic_Behaviour : MonoBehaviour
         neck_constraint_4.data.offset = new Vector3(0, 0, 0);
         //head
         head_constraint.data.limits = new Vector2(-35, 35);
-        head_constraint.data.offset = new Vector3(0, 0, -40);
+        head_constraint.data.offset = new Vector3(0, 0, z_offset);
 
 
         float a = 0;
         float b = 4;
         float c = 1;
         bool d = false;
-
 
         /* if(GetPlayerOffset(a, b, c, d) == 0)//player straight
          {
