@@ -44,6 +44,13 @@ public class Turning_Behaviour : MonoBehaviour
 
     public bool walking_after_turning_on = false;
 
+    void GoToBBT()
+    {
+        if(anim_controll.current_state != anim.bbt)
+        {
+            anim_controll.ChangeAnimationState(anim.bbt);
+        }
+    }
     public bool TurningBehaviour()
     {
         Debug.Log("ENTERING TURNING BEHAV");
@@ -58,19 +65,24 @@ public class Turning_Behaviour : MonoBehaviour
 
                 if (basic_behav.y_goal == Basic_Behaviour.walking_slow_value)
                 {
-                    anim_controll.ChangeAnimationState(anim.turn_walk_slow_tree);
+                    GoToBBT();
+                    basic_behav.set_bbt_values(true, 0, Basic_Behaviour.bbt_turn_slow_value);
                 }
                 if (basic_behav.y_goal == Basic_Behaviour.seek_value)
                 {
-                    anim_controll.ChangeAnimationState(anim.turn_seek_tree);
+                    GoToBBT();
+                    basic_behav.set_bbt_values(true, 0);
                 }
                 if (basic_behav.y_goal == Basic_Behaviour.walking_value)
                 {
-                    anim_controll.ChangeAnimationState(anim.turn_walk_tree);
+                    GoToBBT();
+                    Debug.Log("ohnonononononononono");
+                    basic_behav.set_bbt_values(false, Basic_Behaviour.bbt_no_standing_value, 0);
                 }
                 if (basic_behav.y_goal == Basic_Behaviour.trot_value)
                 {
-                    anim_controll.ChangeAnimationState(anim.turn_trot_tree);
+                    GoToBBT();
+                    basic_behav.set_bbt_values(false, Basic_Behaviour.bbt_no_standing_value, 0);
                     //basic_behav.SetShortTimer(0.3f, 0.6f);
                 }
                 basic_behav.TurnLeft();
@@ -82,19 +94,23 @@ public class Turning_Behaviour : MonoBehaviour
 
                 if (basic_behav.y_goal == Basic_Behaviour.walking_slow_value)
                 {
-                    anim_controll.ChangeAnimationState(anim.turn_walk_slow_tree);
+                    GoToBBT();
+                    basic_behav.set_bbt_values(true, 0, Basic_Behaviour.bbt_turn_slow_value);
                 }
                 if (basic_behav.y_goal == Basic_Behaviour.seek_value)
                 {
-                    anim_controll.ChangeAnimationState(anim.turn_seek_tree);
+                    GoToBBT();
+                    basic_behav.set_bbt_values(true, 0);
                 }
                 if (basic_behav.y_goal == Basic_Behaviour.walking_value)
                 {
-                    anim_controll.ChangeAnimationState(anim.turn_walk_tree);
+                    GoToBBT();
+                    basic_behav.set_bbt_values(false, Basic_Behaviour.bbt_no_standing_value, 0);
                 }
                 if (basic_behav.y_goal == Basic_Behaviour.trot_value)
                 {
-                    anim_controll.ChangeAnimationState(anim.turn_trot_tree);
+                    GoToBBT();
+                    basic_behav.set_bbt_values(false, Basic_Behaviour.bbt_no_standing_value, 0);
                     //basic_behav.SetShortTimer(0.3f, 0.6f);
 
                 }
@@ -109,6 +125,8 @@ public class Turning_Behaviour : MonoBehaviour
                     basic_behav.SetShortTimer(0.2f, 0.5f);
                     dog_audio.panting.Play();
                 }*/
+                GoToBBT();
+                basic_behav.set_bbt_values(false, 0);
                 basic_behav.dog_state = Basic_Behaviour.Animation_state.walking;
                 walking_after_turning_on = true;
                 return walking_after_turning_on;

@@ -39,7 +39,9 @@ public class Chill_Behaviour : MonoBehaviour
         Turning_2,
         WalkToTarget_2,
         Stop,
-        initial
+        initial,
+        Onwards,
+        dodge,
     }
 
     [SerializeField] Step current_step;
@@ -96,6 +98,8 @@ public class Chill_Behaviour : MonoBehaviour
     GameObject target;
     float target_count = 0;
     int num_of_targets = 3;
+    float onwards_timer = 0;
+    float sniff_timer = 0;
     GameObject SetTarget()
     {
         if (target_count % num_of_targets == 0)
@@ -108,7 +112,7 @@ public class Chill_Behaviour : MonoBehaviour
         }
         else if (target_count % num_of_targets == 1)
         {
-            target = chill_pos;
+            target = chill_pos_3;
         }
         Debug.Log("CHILL TARGET = " + target);
 
@@ -117,14 +121,27 @@ public class Chill_Behaviour : MonoBehaviour
     float speed = 0.85f;
     public void BeChill()
     {
-        MU.DodgePlayer(player, 0.7f);
         switch (current_step)
         {
+            case Step.dodge:
+                Debug.Log("DODGING PLAYER IN ENUM");
+                bool doging = MU.DodgePlayer(player_target, 2f);
+                if (!doging)
+                {
+                    current_step = Step.Turning;
+                }
+                break;
             case Step.Turning:
                 /* 
                 * 1. drehen
                 * 2. wenn auf target gucken stehen
                 */
+                if (MU.DodgePlayer(player_target, 2f))
+                {
+                    Debug.Log("YO LISTEN UP HERE IS A STORY!");
+                    current_step = Step.dodge;
+                    break;
+                }
                 if (!MU.walk_until_complete_speed(speed))
                 {
                     Debug.Log("CHILL TURN");
@@ -133,19 +150,35 @@ public class Chill_Behaviour : MonoBehaviour
                     return;
                 }
                 MU.reset_acceleration();
-                bool are_we_facing_the_pos = MU.turn_until_facing(SetTarget(), false); ;
+                bool are_we_facing_the_pos = MU.turn_until_facing(SetTarget(), false);
 
                 if (are_we_facing_the_pos || MU.is_touching(SetTarget()))
+                {
                     current_step = Step.SwitchToSeek;
+                }
                 break;
             case Step.SwitchToSeek:
                 Debug.Log("CHILL Seek");
+                basic_behav.z_acceleration = 0.5f;
                 MU.start_seeking();
-                current_step = Step.WalkToTarget;
+
+                sniff_timer += Time.deltaTime;
+                if (sniff_timer > 2f)
+                {
+                    current_step = Step.WalkToTarget;
+                }
                 break;
             case Step.WalkToTarget:
-                bool are_we_touching_the_pos = MU.walk_until_touching(SetTarget(), 0.5f, false); ;
-
+                if (MU.DodgePlayer(player_target, 2f))
+                {
+                    Debug.Log("YO LISTEN UP HERE IS A STORY!");
+                    current_step = Step.dodge;
+                    break;
+                }
+                bool are_we_touching_the_pos = MU.walk_until_touching(SetTarget(), 0.6f, false);
+                basic_behav.y_acceleration = 1f;
+                basic_behav.z_acceleration = 1.5f;
+                sniff_timer = 0;
                 if (are_we_touching_the_pos)
                 {
                     basic_behav.y_acceleration = basic_behav.default_y_acceleration;
@@ -176,8 +209,9 @@ public class Chill_Behaviour : MonoBehaviour
             case Step.Stop:
 
                 break;
-
         }
+
+
     }
     public void ChillBehaviour()
     {

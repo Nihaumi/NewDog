@@ -148,13 +148,14 @@ public class Basic_Behaviour : MonoBehaviour
     public const float bbt_all_walks_value = -1f;
     //zx
     public const float bbt_seek_value = -1f;
+    public const float bbt_turn_slow_value = 1f;
 
-    public void set_bbt_values(bool seek, float z_value)
+    public void set_bbt_values(bool seek, float z_value, float zx_value = bbt_seek_value)
     {
         if (seek)
         {
             Debug.Log("SEEK");
-            zx_goal = bbt_seek_value;//-1
+            zx_goal = zx_value;//-1
             z_goal = bbt_standing_value;//0
         }
         else if (!seek)
@@ -486,7 +487,7 @@ public class Basic_Behaviour : MonoBehaviour
         }
         else if (GetPlayerOffsetAngle(0, 30, false) == 0 && !behav_switch.IsBehaviourON(2))
         {
-            if(behav_switch.IsBehaviourON(1) && MU.is_touching(player, 5f))
+            if((behav_switch.IsBehaviourON(1) && MU.is_touching(player, 5f) )|| behav_switch.IsBehaviourON(4))
             {
                 focus = 3;
             }

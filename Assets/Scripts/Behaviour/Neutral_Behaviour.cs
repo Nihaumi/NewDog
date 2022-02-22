@@ -37,7 +37,7 @@ public class Neutral_Behaviour : MonoBehaviour
         AfterDodge
     }
 
-   public Step current_step;
+    public Step current_step;
     // Start is called before the first frame update
     void Start()
     {
@@ -152,7 +152,7 @@ public class Neutral_Behaviour : MonoBehaviour
                     {
                         Debug.Log("YO LISTEN UP HERE IS A STORY!");
                         basic_behav.set_bbt_values(false, Basic_Behaviour.bbt_no_standing_value);
-                        basic_behav.z_acceleration = 60f;
+                        //basic_behav.z_acceleration = 60f;
                         basic_behav.x_goal = -Basic_Behaviour.trot_value;
                         basic_behav.x_axis = -Basic_Behaviour.trot_value;
                         basic_behav.y_goal = Basic_Behaviour.standing_value;
@@ -197,7 +197,7 @@ public class Neutral_Behaviour : MonoBehaviour
 
                     }
                 }
-                
+
                 break;
             case Step.Trot:
                 behav_switch.SetNeutralTimer(60);
@@ -207,16 +207,22 @@ public class Neutral_Behaviour : MonoBehaviour
                 basic_behav.y_acceleration = 2f;
                 current_step = Step.WalkToTarget;
                 break;
+
             case Step.AfterDodge:
-                basic_behav.y_acceleration = basic_behav.default_y_acceleration;
-                basic_behav.change_anim_timer = 1f;//TODO anpassen
+                basic_behav.WalkForward();
+                basic_behav.x_acceleration = 1f;
+                basic_behav.y_goal = basic_behav.default_y_acceleration;
+                basic_behav.change_anim_timer = 5f;//TODO anpassen
                 behav_switch.SetNeutralTimer(15);
-                basic_behav.set_bbt_values(false, Basic_Behaviour.bbt_all_walks_value);
+                //basic_behav.set_bbt_values(false, Basic_Behaviour.bbt_all_walks_value);
                 basic_behav.y_goal = Basic_Behaviour.walking_slow_value;
                 basic_behav.dog_state = Basic_Behaviour.Animation_state.walking;
-                current_step = Step.Stop;
+                if (basic_behav.y_axis == Basic_Behaviour.walking_slow_value)
+                    current_step = Step.Stop;
                 break;
+
             case Step.Stop:
+                MU.reset_acceleration();
                 target_count = 0;
                 break;
         }
@@ -438,7 +444,7 @@ public class Neutral_Behaviour : MonoBehaviour
 
                     if (basic_behav.random_index == 0)
                     {
-                       // basic_behav.dog_state = Basic_Behaviour.Animation_state.standing;
+                        // basic_behav.dog_state = Basic_Behaviour.Animation_state.standing;
                         //basic_behav.set_bbt_values(false, Basic_Behaviour.bbt_all_walks_value);
                         //basic_behav.y_goal = Basic_Behaviour.standing_value;
                     }
