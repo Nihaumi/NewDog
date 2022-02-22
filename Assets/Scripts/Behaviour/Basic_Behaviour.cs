@@ -317,7 +317,8 @@ public class Basic_Behaviour : MonoBehaviour
 
     public void TurnLeft(float walking_speed = walking_value)
     {
-        if(zx_goal + z_goal == -1){
+        if (zx_goal + z_goal == -1)
+        {
             Debug.Log("HE IS DEAD JIM!");
             set_bbt_values(false, bbt_no_standing_value);
         }
@@ -336,7 +337,8 @@ public class Basic_Behaviour : MonoBehaviour
 
     public void TurnRight(float walking_speed = walking_value)
     {
-        if(zx_goal + z_goal == -1){
+        if (zx_goal + z_goal == -1)
+        {
             Debug.Log("HE IS DEAD JIM!");
             set_bbt_values(false, bbt_no_standing_value);
         }
@@ -480,18 +482,21 @@ public class Basic_Behaviour : MonoBehaviour
 
         int focus = 3;
 
-     
-        if ( x_goal != standing_value || anim_controll.current_state == anim.sleep || zx_goal != 0)
+
+        if (x_goal != standing_value || anim_controll.current_state == anim.sleep || zx_goal != 0)
         {
             focus = 3;
         }
-        else if (GetPlayerOffsetAngle(0, 30, false) == 0 && !behav_switch.IsBehaviourON(2))
+        else if (behav_switch.IsBehaviourON(1))
         {
-            if((behav_switch.IsBehaviourON(1) && MU.is_touching(player, 5f) )|| behav_switch.IsBehaviourON(4))
+            if ((MU.is_touching(player, 5f) && GetPlayerOffsetAngle(0, 30, false) == 0))
             {
-                focus = 3;
+                focus = 2;
             }
-            else focus = 2;
+            else if (MU.is_touching(player, 8f))
+            {
+                focus = 4;
+            }
         }
         if (behav_switch.IsBehaviourON(2) && GetPlayerOffsetAngle(0, 30, false) == 0 && x_goal == 0)
         {
@@ -513,8 +518,8 @@ public class Basic_Behaviour : MonoBehaviour
                 Debug.Log("TRACK RIGHT");
             }
         }
-        
-        
+
+
         if (!are_rigs_set)
         {
             SetRigValues();
@@ -654,7 +659,7 @@ public class Basic_Behaviour : MonoBehaviour
     }
 
     //TODO: Maybe changerate variable
-    //focus: 0 -> right, 1 -> left, 2 -> head, 3 -> alle aus
+    //focus: 0 -> right, 1 -> left, 2 -> head, 3 -> alle aus, 4 -> forwad aim
     public void SetWeightConstraint(MultiAimConstraint constraint, int focus)
     {
         var b = constraint.data.offset;
@@ -662,9 +667,10 @@ public class Basic_Behaviour : MonoBehaviour
         float curent_weight_right = a.GetWeight(0); //rightHand
         float curent_weight_left = a.GetWeight(1); //leftHand
         float curent_weight_head = a.GetWeight(2); //head
+        float current_weight_forward = a.GetWeight(3);//forward aim
 
         float weight_change_rate = 1.5f;
-        float weight_update_right = 0, weight_update_left = 0, weight_update_head = 0;
+        float weight_update_right = 0, weight_update_left = 0, weight_update_head = 0, weight_update_forward = 0;
 
         switch (focus)
         {
@@ -675,6 +681,8 @@ public class Basic_Behaviour : MonoBehaviour
                 weight_update_left = Mathf.Max(weight_update_left, 0);
                 weight_update_head = curent_weight_head - weight_change_rate * Time.deltaTime;
                 weight_update_head = Mathf.Max(weight_update_head, 0);
+                weight_update_forward = current_weight_forward - weight_change_rate * Time.deltaTime;
+                weight_update_forward = Mathf.Max(weight_update_forward, 0);
                 break;
             case 1:
                 weight_update_right = curent_weight_right - weight_change_rate * Time.deltaTime;
@@ -683,6 +691,8 @@ public class Basic_Behaviour : MonoBehaviour
                 weight_update_left = Mathf.Min(weight_update_left, 1);
                 weight_update_head = curent_weight_head - weight_change_rate * Time.deltaTime;
                 weight_update_head = Mathf.Max(weight_update_head, 0);
+                weight_update_forward = current_weight_forward - weight_change_rate * Time.deltaTime;
+                weight_update_forward = Mathf.Max(weight_update_forward, 0);
                 break;
             case 2:
                 weight_update_right = curent_weight_right - weight_change_rate * Time.deltaTime;
@@ -691,6 +701,8 @@ public class Basic_Behaviour : MonoBehaviour
                 weight_update_left = Mathf.Max(weight_update_left, 0);
                 weight_update_head = curent_weight_head + weight_change_rate * Time.deltaTime;
                 weight_update_head = Mathf.Min(weight_update_head, 1);
+                weight_update_forward = current_weight_forward - weight_change_rate * Time.deltaTime;
+                weight_update_forward = Mathf.Max(weight_update_forward, 0);
                 break;
             case 3:
                 weight_update_right = curent_weight_right - weight_change_rate * Time.deltaTime;
@@ -699,6 +711,18 @@ public class Basic_Behaviour : MonoBehaviour
                 weight_update_left = Mathf.Max(weight_update_left, 0);
                 weight_update_head = curent_weight_head - weight_change_rate * Time.deltaTime;
                 weight_update_head = Mathf.Max(weight_update_head, 0);
+                weight_update_forward = current_weight_forward - weight_change_rate * Time.deltaTime;
+                weight_update_forward = Mathf.Max(weight_update_forward, 0);
+                break;
+            case 4:
+                weight_update_right = curent_weight_right - weight_change_rate * Time.deltaTime;
+                weight_update_right = Mathf.Max(weight_update_right, 0);
+                weight_update_left = curent_weight_left - weight_change_rate * Time.deltaTime;
+                weight_update_left = Mathf.Max(weight_update_left, 0);
+                weight_update_head = curent_weight_head - weight_change_rate * Time.deltaTime;
+                weight_update_head = Mathf.Max(weight_update_head, 0);
+                weight_update_forward = current_weight_forward + weight_change_rate * Time.deltaTime;
+                weight_update_forward = Mathf.Min(weight_update_forward, 1);
                 break;
             default:
                 break;
@@ -706,6 +730,7 @@ public class Basic_Behaviour : MonoBehaviour
         a.SetWeight(0, weight_update_right);
         a.SetWeight(1, weight_update_left);
         a.SetWeight(2, weight_update_head);
+        a.SetWeight(3, weight_update_forward);
         constraint.data.sourceObjects = a;
     }
 
@@ -871,7 +896,7 @@ public class Basic_Behaviour : MonoBehaviour
         return false;
     }
     //triggers the walkingtowards and sets bools
-   
+
 
     // Update is called once per frame
     void Update()
@@ -937,7 +962,7 @@ public class Basic_Behaviour : MonoBehaviour
             Debug.Log("CHILL BOI");
             chill_behav.BeChill();
         }
-        else if(behav_switch.IsBehaviourON(1))
+        else if (behav_switch.IsBehaviourON(1))
         {//neutral
             neutral_behav.DoTrot();//TODO uncomment
             if (dog_state == Animation_state.walking && (neutral_behav.current_step == Neutral_Behaviour.Step.initial || neutral_behav.current_step == Neutral_Behaviour.Step.Stop))

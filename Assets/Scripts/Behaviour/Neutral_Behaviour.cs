@@ -260,6 +260,8 @@ public class Neutral_Behaviour : MonoBehaviour
                     dog_audio.StopAllSounds();
                     basic_behav.ResetParameter();
                     SetBoolForWalkingBT();
+                    anim_controll.ChangeAnimationState(anim.bbt);
+                    basic_behav.set_bbt_values(false, Basic_Behaviour.bbt_all_walks_value);
                     //Debug.Log("standinglist item at rndindex: " + basic_behav.random_index + "is:" + anim.list_standing[basic_behav.random_index]);
                     if (basic_behav.random_index == 0)
                     {
@@ -341,13 +343,14 @@ public class Neutral_Behaviour : MonoBehaviour
                     Debug.Log("sitting list item at rndindex: " + basic_behav.random_index + "is:" + anim.list_sitting[basic_behav.random_index]);
                     break;
                 case Basic_Behaviour.Animation_state.lying:
-                    //audio
-                    dog_audio.StopAllSounds();
-
+                    anim_controll.ChangeAnimationState(anim.bbt);
+                    basic_behav.set_bbt_values(false, Basic_Behaviour.bbt_all_walks_value);
                     basic_behav.ResetParameter();
                     //Debug.Log("lying list item at rndindex: " + basic_behav.random_index + "is:" + anim.list_lying[basic_behav.random_index]);
                     if (basic_behav.random_index == 0)
                     {
+                        anim_controll.ChangeAnimationState(anim.bbt_trans_lying_to_stand);
+                        basic_behav.dog_state = Basic_Behaviour.Animation_state.standing;
                         //anim_controll.ChangeAnimationState(anim.list_lying[basic_behav.random_index]);
                         //basic_behav.dog_state = Basic_Behaviour.Animation_state.sleeping;
                     }
