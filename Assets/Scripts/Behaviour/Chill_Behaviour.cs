@@ -100,6 +100,9 @@ public class Chill_Behaviour : MonoBehaviour
     int num_of_targets = 3;
     float onwards_timer = 0;
     float sniff_timer = 0;
+    float walk_time_default = 11f;
+    [SerializeField] float walk_timer = 20f;
+
     GameObject SetTarget()
     {
         if (target_count % num_of_targets == 0)
@@ -152,7 +155,7 @@ public class Chill_Behaviour : MonoBehaviour
                 MU.reset_acceleration();
                 bool are_we_facing_the_pos = MU.turn_until_facing(SetTarget(), false);
 
-                if (are_we_facing_the_pos || MU.is_touching(SetTarget()))
+                if (basic_behav.GetPlayerOffsetAngle(0, 30, false, SetTarget())== 0 || MU.is_touching(SetTarget()))
                 {
                     current_step = Step.SwitchToSeek;
                 }
@@ -175,11 +178,12 @@ public class Chill_Behaviour : MonoBehaviour
                     current_step = Step.dodge;
                     break;
                 }
-                bool are_we_touching_the_pos = MU.walk_until_touching(SetTarget(), 0.6f, false);
+                
                 basic_behav.y_acceleration = 1f;
                 basic_behav.z_acceleration = 1.5f;
                 sniff_timer = 0;
-                if (are_we_touching_the_pos)
+                walk_timer -= Time.deltaTime;
+                if (MU.is_touching(SetTarget(), 1f) || walk_timer <= 0)
                 {
                     basic_behav.y_acceleration = basic_behav.default_y_acceleration;
                     basic_behav.y_goal = Basic_Behaviour.standing_value;
@@ -187,6 +191,7 @@ public class Chill_Behaviour : MonoBehaviour
                     target_count++;
                     timer = start_timer;
                     animator.SetBool("trans_to_bbt", false);
+                    walk_timer = walk_time_default;
                     current_step = Step.Wait;
                 }
 

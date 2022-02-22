@@ -82,7 +82,7 @@ public class MovementUtils : MonoBehaviour
         return dist;
     }
 
-    private bool is_looking_at(GameObject target)
+    public bool is_looking_at(GameObject target)
     {
         return basic_behav.GetPlayerOffset(0, 16, 0.25f, true, target) == 0;
     }
