@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.19456458, g: 0.23269933, b: 0.26779476, a: 1}
+  m_IndirectSpecularColor: {r: 0.19456428, g: 0.23270041, b: 0.26779678, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3479,7 +3479,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1218534444991294693, guid: 8f3f21caf90c7044f831fdc2606302e9, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.55
+      value: 1.45
       objectReference: {fileID: 0}
     - target: {fileID: 1218534444991294693, guid: 8f3f21caf90c7044f831fdc2606302e9, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3517,9 +3517,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: OVRCameraRig (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 1218534445001426209, guid: 8f3f21caf90c7044f831fdc2606302e9, type: 3}
+      propertyPath: _trackingOriginType
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1218534445372105697, guid: 8f3f21caf90c7044f831fdc2606302e9, type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1218534445372105699, guid: 8f3f21caf90c7044f831fdc2606302e9, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.45
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8f3f21caf90c7044f831fdc2606302e9, type: 3}
