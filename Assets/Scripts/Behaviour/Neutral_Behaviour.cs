@@ -361,7 +361,7 @@ public class Neutral_Behaviour : MonoBehaviour
 
                         if (basic_behav.random_index == 1)
                         {
-                            basic_behav.set_bbt_values(false, Basic_Behaviour.bbt_all_walks_value);
+                            basic_behav.set_bbt_values(false,  Basic_Behaviour.bbt_all_walks_value);
                             basic_behav.y_goal = Basic_Behaviour.walking_slow_value;
                         }
                         if (basic_behav.random_index == 2)
@@ -460,12 +460,12 @@ public class Neutral_Behaviour : MonoBehaviour
                             {
                                 SwitchToOrFromSeekingBehaviour(anim.blend_tree);
                             }*/
-                            basic_behav.set_bbt_values(false, Basic_Behaviour.bbt_all_walks_value);
+                            basic_behav.set_bbt_values(false,  Basic_Behaviour.bbt_all_walks_value);
                             basic_behav.y_goal = Basic_Behaviour.walking_slow_value;
                         }
                         if (basic_behav.random_index == 2)
                         {
-                            basic_behav.set_bbt_values(false, Basic_Behaviour.bbt_all_walks_value);
+                            basic_behav.set_bbt_values(false,  Basic_Behaviour.bbt_all_walks_value);
                             basic_behav.y_goal = Basic_Behaviour.walking_value;
                         }
                         if (basic_behav.random_index == 3)
@@ -476,7 +476,7 @@ public class Neutral_Behaviour : MonoBehaviour
                         if (basic_behav.random_index == 4)
                         {
                             //audio
-                            basic_behav.set_bbt_values(false, Basic_Behaviour.bbt_all_walks_value);
+                            basic_behav.set_bbt_values(false,  Basic_Behaviour.bbt_all_walks_value);
                             /*if (turn_dir_handler.col_det_left_trot.trot_collider_touching_wall || turn_dir_handler.col_det_right_trot.trot_collider_touching_wall)
                             {
                                 Debug.Log("wanted to trot but was colliding");

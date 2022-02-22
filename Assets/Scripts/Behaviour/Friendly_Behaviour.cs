@@ -178,6 +178,7 @@ public class Friendly_Behaviour : MonoBehaviour
                     basic_behav.ResetParameter();
                     dog_audio.StopAllSounds();
                     friendly = true;
+                    basic_behav.set_bbt_values(false, Basic_Behaviour.bbt_standing_value);
                     basic_behav.dog_state = Basic_Behaviour.Animation_state.friendly_walking;
                     current_step = Step.Turning;
                     basic_behav.SetShortTimer(10, 15);
@@ -219,7 +220,7 @@ public class Friendly_Behaviour : MonoBehaviour
                     dog_audio.StopAllSounds();
                     basic_behav.WalkForward();
                     anim_controll.ChangeAnimationState(anim.bbt);
-                    basic_behav.set_bbt_values(false, Basic_Behaviour.bbt_standing_value);
+                    basic_behav.set_bbt_values(false, Basic_Behaviour.bbt_all_walks_value);
                     if (basic_behav.y_goal == Basic_Behaviour.trot_value)
                     {
                         basic_behav.y_goal = Basic_Behaviour.standing_value;

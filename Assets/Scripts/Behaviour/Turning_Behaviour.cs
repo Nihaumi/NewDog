@@ -119,15 +119,19 @@ public class Turning_Behaviour : MonoBehaviour
             case Basic_Behaviour.Animation_state.walking_after_turning:
 
                 basic_behav.SetLongTimer();
-                basic_behav.WalkForward();
-                /*if(Mathf.Abs(basic_behav.x_goal) == Basic_Behaviour.trot_value)
+                if(basic_behav.x_goal == 0)
                 {
-                    basic_behav.SetShortTimer(0.2f, 0.5f);
-                    dog_audio.panting.Play();
-                }*/
+                    basic_behav.WalkForward();
+                }
+             
                 GoToBBT();
                 basic_behav.set_bbt_values(false, 0);
-                basic_behav.dog_state = Basic_Behaviour.Animation_state.walking;
+                if(basic_behav.x_axis == 0)
+                {
+                    basic_behav.set_bbt_values(false, Basic_Behaviour.bbt_all_walks_value);
+                    basic_behav.dog_state = Basic_Behaviour.Animation_state.walking;
+                }
+            
                 walking_after_turning_on = true;
                 return walking_after_turning_on;
             default:
