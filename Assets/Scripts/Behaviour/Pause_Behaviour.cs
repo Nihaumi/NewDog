@@ -237,9 +237,27 @@ public class Pause_Behaviour : MonoBehaviour
         }
         if (current_step == Step.Stop)
         {
-            end_pause = true;
+            if(stop_count == 0)
+            {
+                anim_controll.ChangeAnimationState(anim.bbt_trans_lying_to_stand);
+                basic_behav.set_bbt_values(false, Basic_Behaviour.bbt_standing_value);
+                basic_behav.SetShortTimer(3, 3);
+                basic_behav.ResetParameter();
+                stop_count++;
+            }
+
+        
+            else
+            {
+                stop_count = 0;
+                basic_behav.dog_state = Basic_Behaviour.Animation_state.standing;
+                end_pause = true;
+                basic_behav.SetShortTimer(2, 2);
+            }
         }
     }
+
+    [SerializeField] int stop_count = 0;
     public void ResetBools()
     {
         Debug.Log("BOOL RESET");

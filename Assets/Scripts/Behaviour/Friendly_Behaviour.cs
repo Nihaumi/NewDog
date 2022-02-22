@@ -175,7 +175,9 @@ public class Friendly_Behaviour : MonoBehaviour
             {
                 case Basic_Behaviour.Animation_state.standing:
 
-                    basic_behav.ResetParameter();
+
+                    basic_behav.y_goal = 0;
+                    basic_behav.x_goal = 0;
                     dog_audio.StopAllSounds();
                     friendly = true;
                     basic_behav.set_bbt_values(false, Basic_Behaviour.bbt_standing_value);
@@ -217,7 +219,6 @@ public class Friendly_Behaviour : MonoBehaviour
                     break;
                 case Basic_Behaviour.Animation_state.walking:
                     Debug.Log("friends and walking");
-                    dog_audio.StopAllSounds();
                     basic_behav.WalkForward();
                     anim_controll.ChangeAnimationState(anim.bbt);
                     basic_behav.set_bbt_values(false, Basic_Behaviour.bbt_all_walks_value);

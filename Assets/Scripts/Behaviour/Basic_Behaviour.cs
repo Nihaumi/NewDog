@@ -489,11 +489,11 @@ public class Basic_Behaviour : MonoBehaviour
         }
         else if (behav_switch.IsBehaviourON(1))
         {
-            if ((MU.is_touching(player, 5f) && GetPlayerOffsetAngle(0, 30, false) == 0))
+            if ((MU.is_touching(player, 3f) && GetPlayerOffsetAngle(0, 30, false) == 0))
             {
                 focus = 2;
             }
-            else if (MU.is_touching(player, 8f))
+            else if (MU.is_touching(player, 4f))
             {
                 focus = 4;
             }
