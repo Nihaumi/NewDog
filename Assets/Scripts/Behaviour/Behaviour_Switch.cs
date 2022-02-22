@@ -295,6 +295,13 @@ public class Behaviour_Switch : MonoBehaviour
                 }
                 else is_behav_true = false;
                 break;
+            case 5:
+                if (turning_on == true)
+                {
+                    return true;
+                }
+                else is_behav_true = false;
+                break;
         }
         return is_behav_true;
     }

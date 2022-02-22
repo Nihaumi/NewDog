@@ -980,7 +980,10 @@ public class Basic_Behaviour : MonoBehaviour
         if (change_anim_timer <= 0)
         {
             ChooseRandomIndex();
+
+
             turning_behav.TurningBehaviour();
+
             //behaviours
             if (behav_switch.IsBehaviourON(1) && !turning_behav.walking_after_turning_on)
             {//neutral
