@@ -971,7 +971,7 @@ PrefabInstance:
     - target: {fileID: 1705049978880534628, guid: 3e67ff15ade42fc44b38503074639ff7, type: 3}
       propertyPath: m_audioClip
       value: 
-      objectReference: {fileID: 8300000, guid: de29fc9495594fd4bbf503a9f62a2c5c, type: 3}
+      objectReference: {fileID: 8300000, guid: 334a792f41cd62248b0f0f12f1e45650, type: 3}
     - target: {fileID: 1705049978880534629, guid: 3e67ff15ade42fc44b38503074639ff7, type: 3}
       propertyPath: m_Name
       value: BG_sound_manager
