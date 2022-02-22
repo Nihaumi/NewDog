@@ -48,21 +48,29 @@ MonoBehaviour:
   basic_script: {fileID: 0}
   aggressive_script: {fileID: 0}
   pause_behav: {fileID: 0}
+  chill_behav: {fileID: 0}
   dist: 0
   friendly_distance: 4
   friendly: 0
   agressive: 0
   neutral: 0
   paused: 1
+  chill: 0
   friendly_timer: 60
   agressive_timer: 30
   neutral_timer: 100
   pause_timer: 0
   friendly_time: 30
   agressive_time: 20
-  neutral_time: 30
+  neutral_time: 60
   pause_time: 30
   initial_pause_time: 30
+  friendly_on: 0
+  turning_on: 0
+  aggressive_on: 0
+  neutral_on: 0
+  paused_on: 0
+  chilled_on: 1
   enter_pause: 0
   dog_behaviour: 0
   visited_behaviours_count: 0
