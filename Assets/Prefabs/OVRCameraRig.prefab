@@ -58,7 +58,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1218534444991362471}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1218534444991568263
 GameObject:
@@ -87,6 +87,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 1218534445372105699}
   - {fileID: 1218534444991294695}
   - {fileID: 1218534444991294691}
   - {fileID: 1218534444991294689}
@@ -127,7 +128,7 @@ Transform:
   - {fileID: 1217881670030268677}
   - {fileID: 1218534445661490980}
   m_Father: {fileID: 1218534444991362471}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1218534444991716509
 GameObject:
@@ -160,7 +161,7 @@ Transform:
   - {fileID: 1217881671591589322}
   - {fileID: 1218534446057672942}
   m_Father: {fileID: 1218534444991362471}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1218534444991721665
 GameObject:
@@ -192,7 +193,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1218534444991362471}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &1201923955164152695
 Camera:
@@ -301,7 +302,7 @@ Transform:
   m_Children:
   - {fileID: 1218534445019851017}
   m_Father: {fileID: 1218534444991362471}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!81 &1218534444990017217
 AudioListener:
@@ -418,7 +419,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1218534444991362471}
-  - {fileID: 1218534445372105699}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 165.032, z: 0}
@@ -570,7 +570,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1218534444991362471}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &1201923957158730989
 Camera:
@@ -707,8 +707,8 @@ Transform:
   m_LocalPosition: {x: 0, y: -1.55, z: 0}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children: []
-  m_Father: {fileID: 1218534444991294693}
-  m_RootOrder: 1
+  m_Father: {fileID: 1218534444991362471}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &1218534445372105698
 MeshFilter:

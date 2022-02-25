@@ -483,6 +483,11 @@ public class Basic_Behaviour : MonoBehaviour
 
         focus = 3;
 
+        if (track_head_in_aggro_mode)
+        {
+            focus = 2;
+        }
+
         if (x_goal != standing_value || anim_controll.current_state == anim.sleep || zx_goal != 0)
         {
             focus = 3;
@@ -532,6 +537,7 @@ public class Basic_Behaviour : MonoBehaviour
         SetWeightConstraint(left_eye_constraint, focus);
     }
     bool are_rigs_set = false;
+    public bool track_head_in_aggro_mode = false;
     /*TODO
      * create function or integrate into setweight constraints:
      * change the rig min max values and y offsets

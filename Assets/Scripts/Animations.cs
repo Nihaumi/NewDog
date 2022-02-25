@@ -32,6 +32,8 @@ public class Animations : MonoBehaviour
     public string agg_trans_sleep_to_stand = "agg_trans_sleep_to_stand";
     public string agg_trans_lying_to_stand = "agg_trans_lying_to_stand";
     public string agg_trans_sit_to_stand = "agg_trans_sit_to_stand";
+    public string agg_trot_turn_L_short = "trot_turn_L_short";
+    public string agg_run_circle = "run_circle";
 
 
     //neutral

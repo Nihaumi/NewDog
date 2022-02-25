@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MovementUtils : MonoBehaviour
+public class MU_aggro : MonoBehaviour
 {
+
     GameObject dog;
     Animation_Controll anim_controll;
     Animations anim;
@@ -31,7 +32,7 @@ public class MovementUtils : MonoBehaviour
     {
         anim_controll.ChangeAnimationState(anim.trans_stand_to_lying_00);
     }
-    public bool turn_until_facing(GameObject target, bool and_start_moving = false)
+    public bool turn_until_facing(GameObject target, float speed, bool and_start_moving = false, bool trot_tree = true)
     {
         Debug.Log("TURN GOAL: " + basic_behav.x_goal);
 
@@ -39,7 +40,7 @@ public class MovementUtils : MonoBehaviour
         {
 
             if (and_start_moving)
-                start_moving_straight();
+                start_moving_straight(speed);
             else
                 stop_turning();
             return true;
@@ -47,11 +48,11 @@ public class MovementUtils : MonoBehaviour
         else
         {
 
-            start_turning_towards(target);
+            start_turning_towards(target, speed, trot_tree);
             return false;
         }
     }
-    public bool walk_until_touching(GameObject target, float dist = 1f, bool stopping = true)
+    public bool walk_until_touching(GameObject target, float dist = 1f, bool stopping = true, float speed = 1.5f)
     {
         if (is_touching(target, dist))
         {
@@ -65,7 +66,21 @@ public class MovementUtils : MonoBehaviour
         {
             //start_moving();
             Debug.Log("LOOKING DIRECTLY");
-            looking_directly_at(target);
+            looking_directly_at(target, speed);
+            return false;
+        }
+    }
+
+    public bool slow_down(float end_speed)
+    {
+        basic_behav.y_goal = end_speed;
+        basic_behav.y_acceleration = basic_behav.default_y_acceleration;
+        if(basic_behav.y_axis == end_speed)
+        {
+            return true;
+        }
+        else
+        {
             return false;
         }
     }
@@ -87,10 +102,10 @@ public class MovementUtils : MonoBehaviour
         return basic_behav.GetPlayerOffset(0, 16, 0.25f, true, target) == 0;
     }
 
-    public bool looking_directly_at(GameObject target)
+    public bool looking_directly_at(GameObject target, float y_speed = 1.5f)
     {
         Vector3 target_pos = dog.transform.InverseTransformPoint(target.transform.position);
-        if (Mathf.Round(target_pos.x * 10000) / 10000f == 0.0f)
+        if (Mathf.Round(target_pos.x * 100000) / 100000f == 0.00f)
         {
             Debug.Log("True MIDDLE");
             return true;
@@ -98,21 +113,21 @@ public class MovementUtils : MonoBehaviour
 
         else
         {
-            //Debug.Log("TRAGET LOCAL POS: " + target_pos);
-            //Debug.Log("CORRECTING COURSE");
+
             direction = (target.transform.position - dog.transform.position).normalized;
             rotation = Quaternion.LookRotation(direction);
             dog.transform.rotation = Quaternion.Slerp(dog.transform.rotation, rotation, speed * Time.deltaTime);
 
+            basic_behav.x_goal = y_speed;
             basic_behav.WalkForward();
-            basic_behav.y_acceleration = 2f;
             return false;
         }
     }
 
-    private void start_turning_towards(GameObject target)
+    private void start_turning_towards(GameObject target, float speed, bool trot_tree = true)
     {
-        change_blend_tree_if_necessary(false);
+        change_blend_tree_if_necessary(false, trot_tree);
+        basic_behav.y_goal = speed;
         basic_behav.choose_direction_to_walk_into(target);
     }
 
@@ -130,7 +145,7 @@ public class MovementUtils : MonoBehaviour
                 return false;
             }
         }
-       
+
         else if (Mathf.Abs(basic_behav.y_axis) + Mathf.Abs(basic_behav.x_axis) > speed)
         {
             return true;
@@ -155,9 +170,10 @@ public class MovementUtils : MonoBehaviour
         basic_behav.y_acceleration = y_accel;
     }
 
-    public void start_moving_straight()
+    public void start_moving_straight( float speed)
     {
-        change_blend_tree_if_necessary(false);
+        change_blend_tree_if_necessary(false, true);
+        basic_behav.x_goal = speed;
         basic_behav.WalkForward();
         basic_behav.y_acceleration = 2f;
     }
@@ -206,7 +222,7 @@ public class MovementUtils : MonoBehaviour
         basic_behav.y_goal = -Basic_Behaviour.walking_value;
     }
 
-    public void change_blend_tree_if_necessary(bool standing)
+    public void change_blend_tree_if_necessary(bool standing, bool trot = false)
     {
         //Debug.Log("WHY?!");
         //Debug.Log("CURRENT STATE: " + anim_controll.current_state);
@@ -222,6 +238,10 @@ public class MovementUtils : MonoBehaviour
             Debug.Log("I WANT TO STAND IN MU!");
             //Debug.Log("Z value should be " + Basic_Behaviour.blending_bt_standing + " but is " + basic_behav.z_axis);
             basic_behav.set_bbt_values(false, Basic_Behaviour.bbt_standing_value);
+        }
+        else if (trot)
+        {
+            basic_behav.set_bbt_values(false, 1.5f);
         }
         else if (!standing && (basic_behav.z_goal != Basic_Behaviour.bbt_no_standing_value || basic_behav.zx_goal == Basic_Behaviour.bbt_seek_value))
         {
@@ -244,7 +264,7 @@ public class MovementUtils : MonoBehaviour
             timer = 1f;
             Debug.Log("DODGE");
 
-           
+
             //change_blend_tree_if_necessary(false);
             basic_behav.choose_direction_to_walk_into(player, true);
 
