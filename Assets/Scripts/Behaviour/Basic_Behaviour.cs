@@ -943,7 +943,7 @@ public class Basic_Behaviour : MonoBehaviour
             agg_behav.dist_to_player = Vector3.Distance(dog.transform.position, player.transform.position);
             agg_behav.StopAgression();
 
-            agg_behav.MoveToPositionAndFacePlayer();
+            agg_behav.BeAggressive();
         }
         else if (behav_switch.IsBehaviourON(2))
         {//friendly

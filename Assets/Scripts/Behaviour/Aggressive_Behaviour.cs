@@ -23,23 +23,42 @@ public class Aggressive_Behaviour : MonoBehaviour
     Behaviour_Switch behav_switch;
     GameObject behaviour_manager;
 
-    MovementUtils MU;
+
+    GameObject borders;
+
+    MU_aggro MU;
     GameObject agg_position;
+
+    float y_goal;
+    float x_goal;
+
+    GameObject circle_stopper;
+
+    int slow_down_counter = 0;
+    [SerializeField] int aggro_counter = 0;
+    [SerializeField] float anim_timer = 0;
+
+    [SerializeField] float dist;
+    float start_jump_dist;
+    float speed;
 
     float timer = 1;
     public enum Step
     {
         initial,
-        StartTurning,
-        TurnToPos,
-        WalkToPos,
-        LayDown,
-        TurnToPlayer,
-        FindTarget,
-        DistanceFromTarget,
-        WaitASecond,
+        turn_to_position,
+        go_to_position,
+        slow_down,
+        turn_to_player,
+        go_to_player,
+        jump_anim,
+        timer,
+        trot_away,
+        trot_turn_to_player,
         Stop,
-        test
+        final_jump,
+        chill,
+        circle_player,
     }
     [SerializeField] Step current_step;
 
@@ -67,28 +86,36 @@ public class Aggressive_Behaviour : MonoBehaviour
 
 
         basic_behav.turning_in_place = false;
-        facing_player = false;
-        facing_target = false;
-        started_walking = false;
-        escape_chance = false;
-        aggressive = false;
-        timer_started = false;
-
-        aggression_animation_counter = 0;
-        after_aggression_counter = 0;
         basic_behav.speed = 0.1f;
 
 
-        MU = dog.GetComponent<MovementUtils>();
         agg_position = GameObject.Find("agg_position");
         current_step = Step.initial;
 
+        MU = dog.GetComponent<MU_aggro>();
+        agg_position = GameObject.Find("agg_position");
+
+        borders = GameObject.Find("Borders");
+        circle_stopper = GameObject.Find("circle_stopper");
+
+        y_goal = basic_behav.y_goal;
+        x_goal = basic_behav.x_goal;
+
+        current_step = Step.initial;
+        borders.SetActive(false);
     }
+
+
     // Update is called once per frame
     void Update()
     {
-
+        GetDistance();
     }
+    void GetDistance()
+    {
+        dist = Vector3.Distance(player.transform.position, dog.transform.position);
+    }
+
     //on start false
     bool is_aggressive = false;
     public bool facing_player;
@@ -114,90 +141,207 @@ public class Aggressive_Behaviour : MonoBehaviour
      */
     public bool turn_to_player = false;
 
-    public void MoveToPositionAndFacePlayer()
+    public void BeAggressive()
     {
-
         switch (current_step)
         {
-            case Step.test:
-                MU.walk_back();
-                break;
-            case Step.TurnToPos:
-                /* 
-                 * 1. drehen
-                 * 2. wenn auf target gucken stehen
-                 */
+            case Step.turn_to_position:
 
-                // x_goal = -1
-
-                if (!MU.walk_until_complete_speed(0.75f))
+                y_goal = Basic_Behaviour.trot_value;
+                x_goal = y_goal;
+                if (MU.turn_until_facing(agg_position, 1.5f, true))
                 {
-                    MU.start_moving();
-
-                    return;
+                    y_goal = Basic_Behaviour.trot_value;
+                    current_step = Step.go_to_position;
                 }
-
-                MU.reset_acceleration();
-                bool are_we_facing_the_agg_target = MU.turn_until_facing(agg_position, true);
-
-                if (are_we_facing_the_agg_target || MU.is_touching(agg_position))
-                    current_step = Step.WalkToPos;
+                y_goal = Basic_Behaviour.trot_value;
+                x_goal = y_goal;
                 break;
-            case Step.WalkToPos:
-                /*
-                 * 3. laufen zum target = pause location
-                 */
-                bool are_we_touching_the_agg_pos = MU.walk_until_touching(agg_position, 1f, false);
 
-                if (are_we_touching_the_agg_pos)
-                    current_step = Step.TurnToPlayer;
-                break;
-            case Step.TurnToPlayer:
-                //drehen Sie sich bitte zum Player um!
-                if (!MU.walk_until_complete_speed(0.75f))
+            case Step.go_to_position:
+                if (MU.walk_until_touching(agg_position, 1f, false, 2f))
                 {
-                    return;
+                    current_step = Step.slow_down;
                 }
+                break;
 
-                bool are_we_facing_the_player = MU.turn_until_facing(player);
-
-                if (are_we_facing_the_player)
+            case Step.slow_down:
+                basic_behav.set_bbt_values(false, Basic_Behaviour.bbt_no_standing_value);
+                basic_behav.track_head_in_aggro_mode = false;
+                if (slow_down_counter % 2 == 1)
                 {
-                    Debug.Log("FINDING TARGET");
-                    current_step = Step.FindTarget;
+
+                    if (MU.slow_down(1))
+                    {
+
+                        current_step = Step.jump_anim;
+                    }
+
+                }
+                else
+                {
+                    if (MU.slow_down(1))
+                    {
+                        current_step = Step.turn_to_player;
+                    }
+
                 }
 
                 break;
-            case Step.FindTarget:
-                if (MU.looking_directly_at(player))
+
+            case Step.turn_to_player:
+                basic_behav.set_bbt_values(false, Basic_Behaviour.bbt_no_standing_value);
+                if (MU.turn_until_facing(player, 1f, true, false))
                 {
-                    MU.stop_moving();
-                    current_step = Step.WaitASecond;
+                    current_step = Step.go_to_player;
                 }
                 break;
-            case Step.WaitASecond:
-                timer -= Time.deltaTime;
-                if (timer < 0)
+
+            case Step.go_to_player:
+
+                basic_behav.set_bbt_values(false, 1.5f);
+                //basic_behav.y_acceleration = 6f;
+                if (aggro_counter >= 2)
                 {
-                    current_step = Step.DistanceFromTarget;
+                    start_jump_dist = 7f;
+
+                }
+                else
+                {
+                    start_jump_dist = 5f;
+                }
+                if (MU.walk_until_touching(player, start_jump_dist, false, 2f))
+                {
+                    slow_down_counter++;
+                    current_step = Step.jump_anim;
+                }
+
+                break;
+
+            case Step.jump_anim:
+                basic_behav.track_head_in_aggro_mode = true;
+                basic_behav.y_acceleration = basic_behav.default_y_acceleration;
+                anim_controll.ChangeAnimationState(anim.bite_L);
+                if (aggro_counter >= 2)
+                {
+                    anim_timer = 5f;
+
+                }
+                else
+                {
+                    anim_timer = 10f;
+                }
+                aggro_counter++;
+                current_step = Step.timer;
+
+                break;
+
+            case Step.timer:
+                anim_timer -= Time.deltaTime;
+                if (TimerIsDone(anim_timer))
+                {
+                    if (aggro_counter >= 3)
+                    {
+                        current_step = Step.final_jump;
+                    }
+                    else
+                    {
+                        current_step = Step.trot_away;
+                    }
                 }
                 break;
-            case Step.DistanceFromTarget:
-                if (MU.distance_from_target(player))
+
+            case Step.trot_away:
+
+                if (animator.GetCurrentAnimatorStateInfo(0).IsName(anim.bbt))
                 {
+                    Debug.Log("NOW NOW NOW!!!!!!!!!!");
+                    MU.change_blend_tree_if_necessary(false, true);
+                    y_goal = 2f;
+
+                    if (!MU.is_touching(player, 7.5f))
+                    {
+                        slow_down_counter++;
+                        basic_behav.TurnRight();
+                        current_step = Step.trot_turn_to_player;
+                    }
+                }
+                else
+                {
+                    basic_behav.track_head_in_aggro_mode = false;
+                    anim_controll.ChangeAnimationState(anim.agg_trot_turn_L_short);
+                }
+
+                break;
+
+            /*case Step.circle_player:
+
+                if (MU.is_touching(circle_stopper, 3f))
+                {
+                    current_step = Step.trot_turn_to_player;
+                }
+
+                break;*/
+
+            case Step.trot_turn_to_player:
+
+                if (MU.turn_until_facing(player, 2f, true, true))
+                {
+                    MU.change_blend_tree_if_necessary(false, true);
+                    y_goal = 2f;
+                    current_step = Step.go_to_player;
+                }
+
+                break;
+
+            case Step.final_jump:
+                basic_behav.ResetParameter();
+                basic_behav.track_head_in_aggro_mode = true;
+                basic_behav.y_acceleration = basic_behav.default_y_acceleration;
+                anim_controll.ChangeAnimationState(anim.bite_R);
+                aggro_counter = 0;
+                if (dist < 1f)
+                {
+                    anim_controll.ChangeAnimationState(anim.bbt);
+                    basic_behav.set_bbt_values(false, Basic_Behaviour.bbt_all_walks_value);
+                    basic_behav.y_goal = 1f;
+                    basic_behav.choose_direction_to_walk_into(player, true);
+                    current_step = Step.chill;
+                }
+
+                break;
+
+            case Step.chill:
+                basic_behav.track_head_in_aggro_mode = false;
+                Debug.Log("CHILLL");
+                if (!MU.is_touching(player, 1f))
+                {
+                    MU.change_blend_tree_if_necessary(false, true);
+                    x_goal = 2f;
+                    basic_behav.WalkForward();
+                    y_goal = 2f;
                     current_step = Step.Stop;
+
                 }
+
                 break;
+
             case Step.Stop:
-                /*
-                 * 4. Do nothing
-                 */
-                break;
-            default:
+                Debug.Log("aggro test done");
                 break;
         }
     }
-
+    bool TimerIsDone(float timer)
+    {
+        if (timer <= 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
     public float dist_to_player;
     public float close_enough_to_player = 2f;
     public bool aggressive_too_close = false;
@@ -276,7 +420,7 @@ public class Aggressive_Behaviour : MonoBehaviour
                     anim_controll.ChangeAnimationState(anim.bbt);
                     basic_behav.ResetParameter();
                     basic_behav.dog_state = Basic_Behaviour.Animation_state.aggressiv;
-                    current_step = Step.TurnToPos;
+                    current_step = Step.turn_to_position;
                     basic_behav.SetShortTimer(2, 2);
                     break;
                 default:
@@ -286,96 +430,11 @@ public class Aggressive_Behaviour : MonoBehaviour
         }
         if (current_step == Step.Stop)
         {
-            switch (basic_behav.dog_state)
-            {
-                case Basic_Behaviour.Animation_state.after_aggression:
-                    dog_audio.StopAllSounds();
-                    Debug.Log("AFTER AGGRO");
-                    if (after_aggression_counter == 0)
-                    {
-                        basic_behav.ResetParameter();
-                        anim_controll.ChangeAnimationState(anim.aggresive_blend_tree);
-                        basic_behav.y_goal = Basic_Behaviour.walking_value;
-                        MU.DodgePlayer(player, 4);
-                        after_aggression_counter++;
-                        basic_behav.SetShortTimer(2, 2);
-                    }
-                    else if (after_aggression_counter == 1)
-                    {
-                        basic_behav.TurnLeft();
-                        after_aggression_counter++;
-                        basic_behav.SetShortTimer(2, 2);
+            basic_behav.dog_state = Basic_Behaviour.Animation_state.walking;
+            behav_switch.enter_pause = true;
 
-                    }
-                    else if (after_aggression_counter == 2)
-                    {
-                        basic_behav.dog_state = Basic_Behaviour.Animation_state.walking;
-                        basic_behav.SetShortTimer(2, 2);
-                        basic_behav.WalkForward();
-                        behav_switch.enter_pause = true;
-                    }
-
-                    /*else if (after_aggression_counter == 2)
-                    {
-                        anim_controll.ChangeAnimationState(anim.trans_stand_to_lying_01);
-                        basic_behav.ResetParameter();
-                        after_aggression_counter++;
-                        basic_behav.SetLongTimer();
-                        basic_behav.dog_state = Basic_Behaviour.Animation_state.lying;
-                        dog_audio.PlaySoundAfterPause(dog_audio.panting_calm);
-                    }*/
-
-                    break;
-                case Basic_Behaviour.Animation_state.aggressiv:
-                    aggressive = true;
-                    dog_audio.StopAllSounds();
-                    if (aggression_animation_counter == 1)
-                    {
-                        anim_controll.ChangeAnimationState(anim.aggressive);
-                        aggression_animation_counter++;
-                        basic_behav.SetShortTimer(10, 10);
-                    }
-                    else if (aggression_animation_counter == 0)
-                    {
-                        anim_controll.ChangeAnimationState(anim.bite_L);
-                        aggression_animation_counter++;
-                        basic_behav.SetShortTimer(10, 10);
-                    }
-                    else if (aggression_animation_counter == 2)
-                    {
-                        anim_controll.ChangeAnimationState(anim.bite_R);
-                        aggression_animation_counter++;
-                        basic_behav.dog_state = Basic_Behaviour.Animation_state.after_aggression;
-                        basic_behav.SetShortTimer(1, 1);
-                    }
-                    else if (aggression_animation_counter == 3 % 4)
-                    {/*
-                        basic_behav.dog_state = Basic_Behaviour.Animation_state.after_aggression;
-                        basic_behav.SetShortTimer(2, 2);
-                    */
-                    }
-
-                    //TODO set times to 10
-
-                    break;
-
-                case Basic_Behaviour.Animation_state.standing:
-                    if (aggressive)
-                    {
-                        anim_controll.ChangeAnimationState(anim.lying_01);
-                        basic_behav.dog_state = Basic_Behaviour.Animation_state.lying;
-                    }
-                    else
-                    {
-                        dog_audio.StopAllSounds();
-                        anim_controll.ChangeAnimationState(anim.stand_agg);
-                        basic_behav.dog_state = Basic_Behaviour.Animation_state.aggressiv;
-                        basic_behav.SetShortTimer(2, 2);
-                    }
-                    break;
-            }
         }
-        Debug.Log("AGRssive FUNCTION");
+
 
     }
 }
