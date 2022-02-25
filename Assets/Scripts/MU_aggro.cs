@@ -32,11 +32,11 @@ public class MU_aggro : MonoBehaviour
     {
         anim_controll.ChangeAnimationState(anim.trans_stand_to_lying_00);
     }
-    public bool turn_until_facing(GameObject target, float speed, bool and_start_moving = false, bool trot_tree = true)
+    public bool turn_until_facing(GameObject target, float speed, bool and_start_moving = false, bool trot_tree = true, bool run_tree = false, float angle = 30f)
     {
         Debug.Log("TURN GOAL: " + basic_behav.x_goal);
 
-        if (is_looking_at(target))
+        if (is_looking_at(target, angle))
         {
 
             if (and_start_moving)
@@ -48,7 +48,7 @@ public class MU_aggro : MonoBehaviour
         else
         {
 
-            start_turning_towards(target, speed, trot_tree);
+            start_turning_towards(target, speed, trot_tree, run_tree);
             return false;
         }
     }
@@ -97,9 +97,9 @@ public class MU_aggro : MonoBehaviour
         return dist;
     }
 
-    public bool is_looking_at(GameObject target)
+    public bool is_looking_at(GameObject target, float angle = 30)
     {
-        return basic_behav.GetPlayerOffset(0, 16, 0.25f, true, target) == 0;
+        return basic_behav.GetPlayerOffsetAngle(0, 30f, true, target) == 0;
     }
 
     public bool looking_directly_at(GameObject target, float y_speed = 1.5f)
@@ -124,9 +124,9 @@ public class MU_aggro : MonoBehaviour
         }
     }
 
-    private void start_turning_towards(GameObject target, float speed, bool trot_tree = true)
+    private void start_turning_towards(GameObject target, float speed, bool trot_tree = true, bool run_tree = false)
     {
-        change_blend_tree_if_necessary(false, trot_tree);
+        change_blend_tree_if_necessary(false, trot_tree, run_tree);
         basic_behav.y_goal = speed;
         basic_behav.choose_direction_to_walk_into(target);
     }
@@ -222,7 +222,7 @@ public class MU_aggro : MonoBehaviour
         basic_behav.y_goal = -Basic_Behaviour.walking_value;
     }
 
-    public void change_blend_tree_if_necessary(bool standing, bool trot = false)
+    public void change_blend_tree_if_necessary(bool standing, bool trot = false, bool run_tree = false)
     {
         //Debug.Log("WHY?!");
         //Debug.Log("CURRENT STATE: " + anim_controll.current_state);
@@ -242,6 +242,11 @@ public class MU_aggro : MonoBehaviour
         else if (trot)
         {
             basic_behav.set_bbt_values(false, 1.5f);
+        }
+
+        else if (run_tree)
+        {
+            basic_behav.set_bbt_values(false, 2f);
         }
         else if (!standing && (basic_behav.z_goal != Basic_Behaviour.bbt_no_standing_value || basic_behav.zx_goal == Basic_Behaviour.bbt_seek_value))
         {

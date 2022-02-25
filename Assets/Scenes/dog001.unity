@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.19453108, g: 0.23264612, b: 0.26774096, a: 1}
+  m_IndirectSpecularColor: {r: 0.19457017, g: 0.23270033, b: 0.26779228, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2148,7 +2148,7 @@ MonoBehaviour:
   dir_manager: {fileID: 0}
   dog_sound_manager: {fileID: 0}
   animator: {fileID: 0}
-  aggro_counter: 0
+  aggro_counter: 2
   anim_timer: 0
   dist: 0
   current_step: 0

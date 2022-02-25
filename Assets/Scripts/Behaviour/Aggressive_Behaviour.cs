@@ -28,6 +28,7 @@ public class Aggressive_Behaviour : MonoBehaviour
 
     MU_aggro MU;
     GameObject agg_position;
+    GameObject agg_position_1;
 
     float y_goal;
     float x_goal;
@@ -57,6 +58,7 @@ public class Aggressive_Behaviour : MonoBehaviour
         trot_turn_to_player,
         Stop,
         final_jump,
+        walk_back,
         chill,
         circle_player,
     }
@@ -94,6 +96,7 @@ public class Aggressive_Behaviour : MonoBehaviour
 
         MU = dog.GetComponent<MU_aggro>();
         agg_position = GameObject.Find("agg_position");
+        agg_position_1 = GameObject.Find("agg_position_1");
 
         borders = GameObject.Find("Borders");
         circle_stopper = GameObject.Find("circle_stopper");
@@ -159,7 +162,7 @@ public class Aggressive_Behaviour : MonoBehaviour
                 break;
 
             case Step.go_to_position:
-                if (MU.walk_until_touching(agg_position, 1f, false, 2f))
+                if (MU.walk_until_touching(agg_position, 2f, false, 2f))
                 {
                     current_step = Step.slow_down;
                 }
@@ -191,24 +194,26 @@ public class Aggressive_Behaviour : MonoBehaviour
 
             case Step.turn_to_player:
                 basic_behav.set_bbt_values(false, Basic_Behaviour.bbt_no_standing_value);
-                if (MU.turn_until_facing(player, 1f, true, false))
+
+                if (MU.turn_until_facing(player, 1f, true, true, false, 20f))
                 {
                     current_step = Step.go_to_player;
                 }
+
+
                 break;
 
             case Step.go_to_player:
 
-                basic_behav.set_bbt_values(false, 1.5f);
-                //basic_behav.y_acceleration = 6f;
+                basic_behav.set_bbt_values(false, 2f);
                 if (aggro_counter >= 2)
                 {
-                    start_jump_dist = 7f;
+                    start_jump_dist = 4.5f;//
 
                 }
                 else
                 {
-                    start_jump_dist = 5f;
+                    start_jump_dist = 4.5f;
                 }
                 if (MU.walk_until_touching(player, start_jump_dist, false, 2f))
                 {
@@ -242,7 +247,7 @@ public class Aggressive_Behaviour : MonoBehaviour
                 {
                     if (aggro_counter >= 3)
                     {
-                        current_step = Step.final_jump;
+                        current_step = Step.walk_back;
                     }
                     else
                     {
@@ -255,7 +260,6 @@ public class Aggressive_Behaviour : MonoBehaviour
 
                 if (animator.GetCurrentAnimatorStateInfo(0).IsName(anim.bbt))
                 {
-                    Debug.Log("NOW NOW NOW!!!!!!!!!!");
                     MU.change_blend_tree_if_necessary(false, true);
                     y_goal = 2f;
 
@@ -274,22 +278,26 @@ public class Aggressive_Behaviour : MonoBehaviour
 
                 break;
 
-            /*case Step.circle_player:
-
-                if (MU.is_touching(circle_stopper, 3f))
-                {
-                    current_step = Step.trot_turn_to_player;
-                }
-
-                break;*/
-
             case Step.trot_turn_to_player:
 
-                if (MU.turn_until_facing(player, 2f, true, true))
+                if (MU.turn_until_facing(player, 2f, true, false, true))
                 {
                     MU.change_blend_tree_if_necessary(false, true);
                     y_goal = 2f;
                     current_step = Step.go_to_player;
+                }
+
+                break;
+
+            case Step.walk_back:
+
+                if (MU.is_touching(player, 4f))
+                {
+                    animator.SetBool("walk_back", true);
+                }
+                else
+                {
+                    current_step = Step.final_jump;
                 }
 
                 break;
@@ -300,10 +308,10 @@ public class Aggressive_Behaviour : MonoBehaviour
                 basic_behav.y_acceleration = basic_behav.default_y_acceleration;
                 anim_controll.ChangeAnimationState(anim.bite_R);
                 aggro_counter = 0;
-                if (dist < 1f)
+                if (dist < 1.3f)
                 {
                     anim_controll.ChangeAnimationState(anim.bbt);
-                    basic_behav.set_bbt_values(false, Basic_Behaviour.bbt_all_walks_value);
+                    basic_behav.set_bbt_values(false, Basic_Behaviour.bbt_standing_value);
                     basic_behav.y_goal = 1f;
                     basic_behav.choose_direction_to_walk_into(player, true);
                     current_step = Step.chill;
@@ -314,14 +322,17 @@ public class Aggressive_Behaviour : MonoBehaviour
             case Step.chill:
                 basic_behav.track_head_in_aggro_mode = false;
                 Debug.Log("CHILLL");
-                if (!MU.is_touching(player, 1f))
+                if (!MU.is_touching(player, 1.2f))
                 {
-                    MU.change_blend_tree_if_necessary(false, true);
-                    x_goal = 2f;
-                    basic_behav.WalkForward();
-                    y_goal = 2f;
-                    current_step = Step.Stop;
 
+                    if (MU.turn_until_facing(agg_position_1, 1.5f, true, true))
+                    {
+                        if (MU.walk_until_touching(agg_position_1, 1f, false, 1))
+                        {
+                            current_step = Step.Stop;
+
+                        }
+                    }
                 }
 
                 break;
@@ -331,6 +342,7 @@ public class Aggressive_Behaviour : MonoBehaviour
                 break;
         }
     }
+
     bool TimerIsDone(float timer)
     {
         if (timer <= 0)
