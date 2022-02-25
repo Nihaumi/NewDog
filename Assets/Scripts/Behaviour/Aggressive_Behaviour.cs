@@ -431,6 +431,7 @@ public class Aggressive_Behaviour : MonoBehaviour
         if (current_step == Step.Stop)
         {
             basic_behav.dog_state = Basic_Behaviour.Animation_state.walking;
+            borders.SetActive(true);
             behav_switch.enter_pause = true;
 
         }
