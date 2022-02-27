@@ -229,12 +229,12 @@ public class Aggressive_Behaviour : MonoBehaviour
                 anim_controll.ChangeAnimationState(anim.bite_L);
                 if (aggro_counter >= 2)
                 {
-                    anim_timer = 5f;
+                    anim_timer = 10f;
 
                 }
                 else
                 {
-                    anim_timer = 10f;
+                    anim_timer = 17f;
                 }
                 aggro_counter++;
                 current_step = Step.timer;
