@@ -220,16 +220,16 @@ public class Behaviour_Switch : MonoBehaviour
             {
                 neutral = true;
             }
-            else if (visited_behaviours_count == 2 % 5)
+            /*else if (visited_behaviours_count == 0 % 5)
             {
                 neutral = true;
                 neutral_timer = 10f; //TODO anpassen
-            }
-            else if (visited_behaviours_count == 3 % 5)
+            }*/
+            else if (visited_behaviours_count == 2 % 5)
             {
                 agressive = true;
             }
-            else if (visited_behaviours_count == 4 % 5)
+            else if (visited_behaviours_count == 3 % 5)
             {
                 chill = true;
             }
