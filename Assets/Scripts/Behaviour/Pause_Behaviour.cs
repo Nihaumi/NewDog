@@ -118,7 +118,7 @@ public class Pause_Behaviour : MonoBehaviour
                     current_step = Step.dodge;
                     break;
                 }
-                bool are_we_touching_the_player = MU.walk_until_touching(pause_target, 1, false);
+                bool are_we_touching_the_player = MU.walk_until_touching(pause_target, 20, false);
 
                 if (are_we_touching_the_player)
                     current_step = Step.TurnAround;
@@ -152,7 +152,7 @@ public class Pause_Behaviour : MonoBehaviour
             case Step.LayDown:
 
                 MU.lay_down();
-                if(behav_switch.GetVisitedBehavCount() == 0)
+                if (behav_switch.GetVisitedBehavCount() == 0)
                 {
                     basic_behav.change_anim_timer = 11f;
                 }
@@ -175,8 +175,13 @@ public class Pause_Behaviour : MonoBehaviour
     public bool facing_player;
     [SerializeField] bool lying_down;
     public bool end_pause;
-    public float pause_goal_dist = 2f;
+    public float pause_goal_dist = 20f;
     public float dist_to_target;
+
+    public void PauseCopy()
+    {
+        end_pause = true;
+    }
     public void PauseBehaviour()
     {
         if (current_step == Step.initial)
@@ -195,7 +200,7 @@ public class Pause_Behaviour : MonoBehaviour
                         end_pause = true;
                         go_to_location = false;
                     }*/
-                    basic_behav.dog_state = Basic_Behaviour.Animation_state.lying;
+                   basic_behav.dog_state = Basic_Behaviour.Animation_state.lying;
                     current_step = Step.Turning;
                     basic_behav.SetShortTimer(3, 3);
                     Debug.Log("PAUSE BEHAV");
@@ -237,7 +242,7 @@ public class Pause_Behaviour : MonoBehaviour
         }
         if (current_step == Step.Stop)
         {
-            if(stop_count == 0)
+            if (stop_count == 0)
             {
                 anim_controll.ChangeAnimationState(anim.bbt_trans_lying_to_stand);
                 basic_behav.set_bbt_values(false, Basic_Behaviour.bbt_standing_value);
@@ -246,7 +251,7 @@ public class Pause_Behaviour : MonoBehaviour
                 stop_count++;
             }
 
-        
+
             else
             {
                 stop_count = 0;

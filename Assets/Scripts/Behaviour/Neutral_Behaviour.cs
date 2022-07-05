@@ -121,7 +121,7 @@ public class Neutral_Behaviour : MonoBehaviour
             case Step.Turn:
                 MU.reset_acceleration();
                 basic_behav.z_acceleration = 6f;
-                behav_switch.SetNeutralTimer(60);
+                behav_switch.SetNeutralTimer(10);
                 if (!MU.walk_until_complete_speed(0.85f))
                 {
                     Debug.Log("NEUTRAL TURN");
@@ -188,7 +188,7 @@ public class Neutral_Behaviour : MonoBehaviour
                         {
                             basic_behav.y_acceleration = basic_behav.default_y_acceleration;
                             basic_behav.change_anim_timer = 1f;//TODO anpassen
-                            behav_switch.SetNeutralTimer(30);
+                            behav_switch.SetNeutralTimer(10);
                             basic_behav.set_bbt_values(false, Basic_Behaviour.bbt_all_walks_value);
                             basic_behav.y_goal = Basic_Behaviour.walking_slow_value;
                             basic_behav.dog_state = Basic_Behaviour.Animation_state.walking;
@@ -200,7 +200,7 @@ public class Neutral_Behaviour : MonoBehaviour
 
                 break;
             case Step.Trot:
-                behav_switch.SetNeutralTimer(60);
+                behav_switch.SetNeutralTimer(10);
                 basic_behav.set_bbt_values(false, Basic_Behaviour.bbt_all_walks_value);
                 basic_behav.WalkForward();
                 basic_behav.y_goal = Basic_Behaviour.trot_value;
@@ -213,7 +213,7 @@ public class Neutral_Behaviour : MonoBehaviour
                 basic_behav.x_acceleration = 1f;
                 basic_behav.y_goal = basic_behav.default_y_acceleration;
                 basic_behav.change_anim_timer = 5f;//TODO anpassen
-                behav_switch.SetNeutralTimer(15);
+                behav_switch.SetNeutralTimer(10);
                 //basic_behav.set_bbt_values(false, Basic_Behaviour.bbt_all_walks_value);
                 basic_behav.y_goal = Basic_Behaviour.walking_slow_value;
                 basic_behav.dog_state = Basic_Behaviour.Animation_state.walking;

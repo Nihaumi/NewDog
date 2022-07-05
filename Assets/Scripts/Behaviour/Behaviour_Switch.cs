@@ -34,9 +34,9 @@ public class Behaviour_Switch : MonoBehaviour
     [SerializeField] float pause_timer;
     [SerializeField] float friendly_time = 60f;
     [SerializeField] float agressive_time = 60f;
-    [SerializeField] float neutral_time = 30f;
+    [SerializeField] float neutral_time = 10f;
     [SerializeField] float pause_time = 30f;
-    [SerializeField] float initial_pause_time = 20f;
+    [SerializeField] float initial_pause_time = 10f;
 
     [SerializeField] bool friendly_on = false;
     [SerializeField] bool turning_on = false;
@@ -229,7 +229,7 @@ public class Behaviour_Switch : MonoBehaviour
             {
                 agressive = true;
             }
-            else if (visited_behaviours_count == 3 % 5)
+            else //if (visited_behaviours_count == 3 % 5)
             {
                 chill = true;
             }

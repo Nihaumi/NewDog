@@ -1015,6 +1015,7 @@ public class Basic_Behaviour : MonoBehaviour
             else if (behav_switch.IsBehaviourON(0))
             {//pause
                 pause_behav.PauseBehaviour();
+                //pause_behav.PauseCopy();
             }
             else if (behav_switch.IsBehaviourON(4))
             {
